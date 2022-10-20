@@ -1,0 +1,1 @@
+while (dog<=printread) assign dog+1 to dog
