@@ -86,22 +86,45 @@ public class Lexer {
 
 		switch (peek) {
 			// ... gestire i casi di ( ) [ ] { } + - * / ; , ... //
-			case '!': // peek = ' '; return Token.not;
-			case '(':
-			case ')':
-			case '[':
-			case ']':
-			case '{':
-			case '}':
-			case '+':
-			case '-':
-			case '*':
-			case '/':
-			case ';':
-			case ',':
-				Token res = new Token(peek);
+			case '!':
 				peek = ' ';
-				return res;
+				return Token.not;
+			case '(':
+				peek = ' ';
+				return Token.lpt;
+			case ')':
+				peek = ' ';
+				return Token.rpt;
+			case '[':
+				peek = ' ';
+				return Token.lpq;
+			case ']':
+				peek = ' ';
+				return Token.rpq;
+			case '{':
+				peek = ' ';
+				return Token.lpg;
+			case '}':
+				peek = ' ';
+				return Token.rpg;
+			case '+':
+				peek = ' ';
+				return Token.plus;
+			case '-':
+				peek = ' ';
+				return Token.minus;
+			case '*':
+				peek = ' ';
+				return Token.mult;
+			case '/':
+				peek = ' ';
+				return Token.div;
+			case ';':
+				peek = ' ';
+				return Token.semicolon;
+			case ',':
+				peek = ' ';
+				return Token.comma;
 			// fine gestire i casi di ( ) [ ] { } + - * / ; , ... //
 			case '&':
 				readch(br);
