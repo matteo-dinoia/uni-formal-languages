@@ -1,2 +1,21 @@
-while (dog<=printread) assign dog+1 to dog
+/*while (dog<=printread) assign dog+1 to dog
 ( ) [ ] { } + - * / ; ,
+_lol //___a____adsa21312_#@[?]/////
+ciao*/
+public static void main(String[] args) {
+	Lexer lex assign new Lexer();
+	try {
+		BufferedReader br assign new BufferedReader(new FileReader(path));
+
+		Token tok;
+		do {
+			tok assign lex,lexical_scan(br);
+			if(tok==null)
+				return;
+			System,out,print(tok+||);
+		} while (tok,tag <> Tag,EOF);
+		br,close();
+	} catch (IOException e) {
+		e,printStackTrace();
+	}
+}

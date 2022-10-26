@@ -3,12 +3,13 @@ import java.io.*;
 public class Lexer {
 	public static int line = 1;
 	private char peek = ' ';
+	public static final char EOF=(char) -1;
 
 	private void readch(BufferedReader br) {
 		try {
 			peek = (char) br.read();
 		} catch (IOException exc) {
-			peek = (char) -1; // ERROR
+			peek = EOF; // ERROR
 		}
 	}
 
@@ -18,7 +19,7 @@ public class Lexer {
 
 		// CHECK NO 0n
 		if (val == 0 && Character.isDigit(peek)) {
-			System.err.println("Erroneous character after 0 : " + peek);
+			System.err.println("\n\nErroneous character after 0 : " + peek);
 			return null;
 		}
 
@@ -28,9 +29,9 @@ public class Lexer {
 			readch(br);
 		}
 
-		// CHECK NO NUMBER-CHAR
-		if (Character.isLetter(peek)) {
-			System.err.println("Erroneous character after number : " + peek);
+		// CHECK NO NUMBER-CHAR OR NUM_
+		if (Character.isLetter(peek) || peek=='_') {
+			System.err.println("\n\nErroneous character after number : '" + peek+"'");
 			return null;
 		}
 
@@ -41,15 +42,25 @@ public class Lexer {
 	// ... gestire il caso degli identificatori e delle parole chiave //
 	private Token toWordToken(BufferedReader br) {
 		String s = "";
+		boolean onlySlash=true;
 
 		// OBTAIN STRING
 		do {
 			s += "" + peek;
+			if(peek!='_')
+				onlySlash=false;
 			readch(br);
-		} while (Character.isLetterOrDigit(peek));
+		} while (Character.isLetterOrDigit(peek) || peek=='_');
 
+		//CHECK FOR _
+		if(s.charAt(0)=='_'){
+			if(onlySlash){
+				System.err.println("\n\nErroneous identification (only '_') in: " +s);
+				return null;
+			}
+		}
 		// KEY WORD
-		if (s.equals("assign"))
+		else if (s.equals("assign"))
 			return Word.assign;
 		else if (s.equals("to"))
 			return Word.to;
@@ -78,13 +89,15 @@ public class Lexer {
 	}
 
 	public Token lexical_scan(BufferedReader br) {
-		while (peek == ' ' || peek == '\t' || peek == '\n' || peek == '\r') {
-			if (peek == '\n')
-				line++;
-			readch(br);
-		}
+		while(true){ //For empty token like comments
+			while (peek == ' ' || peek == '\t' || peek == '\n' || peek == '\r') {
+				if (peek == '\n')
+					line++;
+				readch(br);
+			}
 
-		switch (peek) {
+
+			switch (peek) {
 			// ... gestire i casi di ( ) [ ] { } + - * / ; , ... //
 			case '!':
 				peek = ' ';
@@ -117,8 +130,27 @@ public class Lexer {
 				peek = ' ';
 				return Token.mult;
 			case '/':
-				peek = ' ';
-				return Token.div;
+				readch(br);
+				if(peek=='/'){
+					do{
+						readch(br);
+					}while(peek!=EOF && peek!='\n');
+				}
+				else if(peek=='*'){
+					char old;
+					peek='\0';
+					do{
+						old=peek;
+						readch(br);
+					}while(peek!=EOF && !(old=='*' && peek=='/'));
+					if(peek==EOF){
+						System.err.println("\n\nError, never closed /* */ type comment : ");
+						return null;
+					}
+					peek=' ';
+				}
+				else return Token.div; //no new peek
+				break;
 			case ';':
 				peek = ' ';
 				return Token.semicolon;
@@ -132,8 +164,7 @@ public class Lexer {
 					peek = ' ';
 					return Word.and;
 				} else {
-					System.err.println("Erroneous character"
-							+ " after & : " + peek);
+					System.err.println("\n\nErroneous character after & : " + peek);
 					return null;
 				}
 				// ... gestire i casi di || < > <= >= == <> ... //
@@ -143,8 +174,7 @@ public class Lexer {
 					peek = ' ';
 					return Word.or;
 				} else {
-					System.err.println("Erroneous character"
-							+ " after & : " + peek);
+					System.err.println("\n\nErroneous character after | : " + peek);
 					return null;
 				}
 			case '<':
@@ -158,8 +188,7 @@ public class Lexer {
 					peek = ' ';
 					return Word.ne;
 				} else {
-					System.err.println("Erroneous character"
-							+ " after & : " + peek);
+					System.err.println("\n\nErroneous character after < : " + peek);
 					return null;
 				}
 			case '>':
@@ -170,8 +199,7 @@ public class Lexer {
 					peek = ' ';
 					return Word.ge;
 				} else {
-					System.err.println("Erroneous character"
-							+ " after & : " + peek);
+					System.err.println("\n\nErroneous character after > : " + peek);
 					return null;
 				}
 			case '=':
@@ -180,22 +208,22 @@ public class Lexer {
 					peek = ' ';
 					return Word.eq;
 				} else {
-					System.err.println("Erroneous character"
-							+ " after & : " + peek);
+					System.err.println("\n\nErroneous character after = : " + peek);
 					return null;
 				}
 				// fine gestire i casi di || < > <= >= == <> ... //
-			case (char) -1:
+			case EOF:
 				return new Token(Tag.EOF);
 			default:
-				if (Character.isLetter(peek)) {
+				if (Character.isLetter(peek) || peek=='_') {
 					return toWordToken(br);
 				} else if (Character.isDigit(peek)) {
 					return toNumberToken(br);
 				} else {
-					System.err.println("Erroneous character: " + peek);
+					System.err.println("\n\nErroneous character: " + peek);
 					return null;
 				}
+			}
 		}
 	}
 
@@ -209,7 +237,9 @@ public class Lexer {
 			Token tok;
 			do {
 				tok = lex.lexical_scan(br);
-				System.out.println("Scan: " + tok);
+				if(tok==null)
+					return;
+				System.out.print(tok+" ");
 			} while (tok.tag != Tag.EOF);
 			br.close();
 		} catch (IOException e) {
