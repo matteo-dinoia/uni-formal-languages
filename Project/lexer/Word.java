@@ -1,3 +1,4 @@
+package lexer;
 
 public class Word extends Token {
 	public String lexeme = "";
@@ -7,6 +8,7 @@ public class Word extends Token {
 		lexeme = s;
 	}
 
+	@Override
 	public String toString() {
 		return "<" + tag + ", " + lexeme + ">";
 	}
