@@ -1,6 +1,7 @@
 package parser;
 
-import java.io.BufferedReader;
+import java.io.*;
+
 import lexer.Lexer;
 import lexer.Tag;
 import lexer.Token;
@@ -21,20 +22,19 @@ public class Parser {
 		lex = l;
 		pbr = br;
 		move(); // read first term
-
 	}
 
-	void move() { /* lex a term */
+	private void move() { /* lex a term */
 		look = lex.lexical_scan(pbr);
 		if(!silentParser)
 			System.out.println("token = " + look);
 	}
 
-	void error(String s) { /* print error messange */
-		throw new Error("near line " + lex.line + ": " + s);
+	private void error(String s) { /* print error messange */
+		throw new Error("near line " + lex.line + ", at symbol "+look.tag+ ": " + s);
 	}
 
-	void match(int t) {
+	private void match(int t) {
 		if (look.tag == t) {
 			if (look.tag != Tag.EOF)
 				move();
@@ -42,102 +42,279 @@ public class Parser {
 			error("syntax error");
 	}
 
-	/* VARIABLE */
-	public void start() {
-		switch (look.tag) {
-			case '(':
-			case Tag.NUM:
-				/*REAL*/
-				expr();
-				match(Tag.EOF);
-				break;
-			default:
-				error("wrong caracter: "+look+" in start with guide {(, NUM}");
+	//VARIABLE
+	public void prog(){
+		switch(look.tag){
+		case Tag.ASSIGN:
+		case Tag.PRINT:
+		case Tag.READ:
+		case Tag.WHILE:
+		case Tag.COND:
+		case '{':
+			statlist();
+			statlistp();
+			break;
+		default:
+			error("in statlist");
 		}
 	}
 
-	private void expr() {
-		switch (look.tag){
-			case '(':
-			case Tag.NUM:
-				/*REAL*/
-				term();
-				exprp();
-				break;
-			default:
-				error("wrong caracter: "+look+" in expr with guide {(, NUM}");
+	private void statlist(){
+		switch(look.tag){
+		case Tag.ASSIGN:
+		case Tag.PRINT:
+		case Tag.READ:
+		case Tag.WHILE:
+		case Tag.COND:
+		case '}':
+			stat();
+			statlistp();
+			break;
+		default:
+			error("in statlist");
 		}
 	}
 
-	private void exprp() {
-		switch (look.tag) {
-			case '+':
-				match('+');
-				term();
-				exprp();
-				break;
-			case '-':
-				match('-');
-				term();
-				exprp();
-				break;
-			case ')':
-			case Tag.EOF:
-				break;
-			default:
-				error("wrong caracter: "+look+" in exprp with guide {+,-,9,EOF}");
+	private void statlistp() {
+		switch(look.tag){
+		case ';':
+			match(';');
+			stat();
+			statlistp();
+			break;
+		case Tag.EOF:
+		case '}':
+			break;
+		default:
+			error("in statlistp");
 		}
 	}
 
-	private void term() {
-		switch (look.tag) {
-			case '(':
-			case Tag.NUM:
-				/*REAL*/
-				fact();
-				termp();
-				break;
-			default:
-				error("wrong caracter: "+look+" in term with guide {(, NUM}");
+	private void stat() {
+		switch(look.tag){
+		case Tag.ASSIGN:
+			match(Tag.ASSIGN);
+			expr();
+			match(Tag.TO);
+			idlist();
+			break;
+		case Tag.PRINT:
+			match(Tag.PRINT);
+			match('[');
+			exprlist();
+			match(']');
+			break;
+		case Tag.READ:
+			match(Tag.READ);
+			match('[');
+			idlist();
+			match(']');
+			break;
+		case Tag.WHILE:
+			match(Tag.WHILE);
+			match('(');
+			bexpr();
+			match(')');
+			stat();
+			break;
+		case Tag.COND:
+			match(Tag.COND);
+			match('[');
+			optlist();
+			match(']');
+			conditionalp();
+			match(Tag.END);
+			break;
+		case '{':
+			match('{');
+			statlist();
+			match('}');
+			break;
+		default:
+			error("in stat");
 		}
 	}
 
-	private void termp() {
-		switch (look.tag) {
-			case '*':
-				match('*');
-				fact();
-				termp();
-				break;
-			case '/':
-				match('/');
-				fact();
-				termp();
-				break;
-			case ')':
-			case Tag.EOF:
-			case '+':
-			case '-':
-				break;
-			default:
-				error("wrong caracter: "+look+" in termp with guide {*, /, ), EOF}");
+	private void conditionalp(){
+		switch(look.tag){
+		case Tag.ELSE:
+			match(Tag.ELSE);
+			stat();
+			break;
+		case Tag.END:
+			break;
+		default:
+			error("in idlist");
 		}
 	}
 
-	private void fact() {
-		switch (look.tag) {
-			case '(':
-				match('(');
-				expr();
-				match(')');
-				break;
-			case Tag.NUM:
-				match(Tag.NUM);
-				break;
-			default:
-				error("wrong caracter: "+look+" in fact with guide {(, NUM}");
+	private void idlist(){
+		switch(look.tag){
+		case Tag.ID:
+			match(Tag.ID);
+			idlistp();
+			break;
+		default:
+			error("in idlist");
 		}
 	}
 
+	private void idlistp(){
+		switch(look.tag){
+		case ',':
+			match(',');
+			match(Tag.ID);
+			idlistp();
+			break;
+		case ']':
+		case '}':
+		case Tag.OPTION:
+		case Tag.END:
+		case Tag.EOF:
+		case ';':
+			break;
+		default:
+			error("in idlistp");
+		}
+	}
 
+	private void optlist(){
+		switch(look.tag){
+		case Tag.OPTION:
+			optitem();
+			optlistp();
+			break;
+		default:
+			error("in optlist");
+		}
+	}
+
+	private void optlistp(){
+		switch(look.tag){
+		case Tag.OPTION:
+			optitem();
+			optlistp();
+			break;
+		case ']':
+			break;
+		default:
+			error("in optlistp");
+		}
+	}
+
+	private void optitem(){
+		switch(look.tag){
+		case Tag.OPTION:
+			match(Tag.OPTION);
+			match('(');
+			bexpr();
+			match(')');
+			match(Tag.DO);
+			stat();
+			break;
+		default:
+			error("in optitem");
+		}
+	}
+
+	private void bexpr(){
+		switch(look.tag){
+		case Tag.RELOP:
+			match(Tag.RELOP);
+			expr();
+			expr();
+			break;
+		default:
+			error("in bexpr");
+		}
+	}
+
+	private void expr(){
+		switch(look.tag){
+		case '+':
+			match('+');
+			match('(');
+			exprlist();
+			match(')');
+			break;
+		case '*':
+			match('*');
+			match('(');
+			exprlist();
+			match(')');
+			break;
+		case '-':
+			match('-');
+			expr();
+			expr();
+			break;
+		case '/':
+			match('/');
+			expr();
+			expr();
+			break;
+		case Tag.NUM:
+			match(Tag.NUM);
+			break;
+		case Tag.ID:
+			match(Tag.ID);
+			break;
+		default:
+			error("in expr");
+		}
+	}
+
+	private void exprlist(){
+		switch(look.tag){
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+		case Tag.NUM:
+		case Tag.ID:
+			expr();
+			exprlistp();
+			break;
+		default:
+			error("in exprlist");
+		}
+	}
+
+	private void exprlistp(){
+		switch(look.tag){
+		case ',':
+			match(',');
+			expr();
+			exprlistp();
+			break;
+		case ']':
+		case ')':
+			break;
+		default:
+			error("in exprlistp");
+		}
+	}
+
+	public static void main(String args[]){
+		Lexer lex = new Lexer();
+		BufferedReader br=null;
+		try {
+			br = new BufferedReader(new FileReader("Project/parser/input.txt"));
+			Parser parser = new Parser(lex, br);
+			parser.prog();
+			System.out.println("Input OK");
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			if(br!=null){
+				try {
+					br.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

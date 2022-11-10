@@ -1,7 +1,6 @@
 package lexer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Lexer {
 	public int line = 1;
@@ -229,5 +228,31 @@ public class Lexer {
 		}
 	}
 
+	private static void main(String args[]){
+		Lexer lex = new Lexer();
+		BufferedReader br=null;
+		try {
+			br = new BufferedReader(new FileReader("Project/lexer/input-lexer.txt"));
 
+			Token tok;
+			do {
+				tok = lex.lexical_scan(br);
+				if (tok == null)
+					return;
+				System.out.print(tok + " ");
+			} while (tok.tag != Tag.EOF);
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			if(br!=null){
+				try {
+					br.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

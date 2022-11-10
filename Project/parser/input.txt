@@ -1,0 +1,13 @@
+assign 10 to a,b;
+print[a,b];
+read[x,y];
+print[1,+(2,3,4)];
+conditional [
+	option (> x y) do print[x]
+	option (== x y) do print[x,y]
+	]
+	else print[y] end;
+while (> x 0) {
+	assign - x 1 to x;
+	print[x]
+}
