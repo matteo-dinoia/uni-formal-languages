@@ -1,8 +1,8 @@
 public class Es4 extends Parser {
 	protected void S() {
-		int peeked=peek();
+		char peeked=peek();
 		switch (peeked) {
-			case '0': // S → 0...9
+			case '0': // S -> 0...9
 			case '1':
 			case '2':
 			case '3':
@@ -14,18 +14,22 @@ public class Es4 extends Parser {
 			case '9':
 				match(peeked);
 				break;
-			case '+': // S → +SS
+			case '+': // S -> +SS
 				match('+');
 				S();
 				S();
 				break;
-			case '*': // S → *SS
+			case '*': // S -> *SS
 				match('*');
 				S();
 				S();
 				break;
 			default:
-				throw error();
+				throw guideError("S");
 		}
+	}
+
+	public static void main(String args[]){
+		new Es4().executeTest();
 	}
 }

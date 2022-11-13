@@ -1,7 +1,6 @@
 package parser;
 
 import java.io.*;
-
 import lexer.Lexer;
 import lexer.Tag;
 import lexer.Token;
@@ -294,7 +293,6 @@ public class Parser {
 			error("in exprlistp");
 		}
 	}
-
 	public static void main(String args[]){
 		Lexer lex = new Lexer();
 		BufferedReader br=null;
@@ -317,4 +315,5 @@ public class Parser {
 			}
 		}
 	}
+
 }
