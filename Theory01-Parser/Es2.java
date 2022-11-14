@@ -5,6 +5,7 @@ public class Es2 extends Parser {
 				match('[');
 				S();
 				match(']');
+				S();
 				break;
 			case ']':
 			case '$': // S -> epsilon

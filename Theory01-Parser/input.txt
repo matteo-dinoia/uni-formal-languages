@@ -1,15 +1,4 @@
-t
-f
-t&f
-t|f
-tt
-ff
-&
-|
-$
-
-mega lol
-t&t&t
-t|f|f
-t|t|(f&t)
-(f|t)&t
+[][]
+[[]]
+[]
+[][[][]]
