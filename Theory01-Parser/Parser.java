@@ -33,7 +33,9 @@ public abstract class Parser {
 	public void executeTest(){
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("Theory01-Parser/input.txt"));
+			final String relativePath="input.txt";
+			final String absolutePath=this.getClass().getResource(relativePath).toString().substring("file:".length());
+			br = new BufferedReader(new FileReader(absolutePath));
 			String line=br.readLine();
 			while(line!=null){
 				try{
