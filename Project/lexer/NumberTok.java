@@ -11,4 +11,8 @@ public class NumberTok extends Token {
 	public String toString() {
 		return "<" + tag + ", " + value + ">";
 	}
+
+	public int getValue(){
+		return value;
+	}
 }

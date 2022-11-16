@@ -15,7 +15,7 @@ public class Lexer {
 		}
 	}
 
-	private Token toNumberToken(BufferedReader br) {
+	private NumberTok toNumberToken(BufferedReader br) {
 		int val = peek - '0';
 		readch(br);
 
@@ -228,7 +228,7 @@ public class Lexer {
 		}
 	}
 
-	private static void main(String args[]){
+	public static void main(String args[]){
 		Lexer lex = new Lexer();
 		BufferedReader br=null;
 		try {
