@@ -145,22 +145,17 @@ public class Evaluation {
 
 	/* MAIN */
 	public static void main(String args[]){
-		Lexer lex = new Lexer();
 		BufferedReader br=null;
 		try {
 			//FILE READING
-			final String relativePath="input.txt";
-			final String absolutePath="Project/evaluation/"+relativePath;
-			br = new BufferedReader(new FileReader(absolutePath));
+			br = new BufferedReader(new FileReader("Project/_4_evaluation/input.txt"));
 
 			//EXECUTION
-			Evaluation eval = new Evaluation(lex, br, true);
-			try{
-				eval.start();
-			}
-			catch(Error e){
-				System.out.println("Linea \""+"\" non riconoscituta:\n\t"+e.getMessage());
-			}
+			Evaluation eval = new Evaluation(new Lexer(), br);
+			eval.start();
+
+			//RECOGNISED
+			System.out.println("Input OK (evaluated correctly)");
 		} catch (Exception e) {e.printStackTrace();
 		}finally{
 			if(br==null) return;

@@ -138,14 +138,14 @@ public class ParserOld {
 	}
 
 	public static void main(String args[]){
-		Lexer lex = new Lexer();
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("Project/lexer/input-parser.txt"));
-			ParserOld parser = new ParserOld(lex, br);
+			br = new BufferedReader(new FileReader("Project/_3_1_parser_math/input.txt"));
+
+			ParserOld parser = new ParserOld(new Lexer(), br);
 			parser.start();
-			System.out.println("Input OK");
-			br.close();
+
+			System.out.println("Input OK  (parsed correctly)");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally{

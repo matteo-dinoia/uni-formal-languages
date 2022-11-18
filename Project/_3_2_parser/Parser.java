@@ -292,14 +292,14 @@ public class Parser {
 		}
 	}
 	public static void main(String args[]){
-		Lexer lex = new Lexer();
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("Project/parser/input.txt"));
-			Parser parser = new Parser(lex, br);
+			br = new BufferedReader(new FileReader("Project/_3_2_parser/input.txt"));
+
+			Parser parser = new Parser(new Lexer(), br);
 			parser.prog();
-			System.out.println("Input OK");
-			br.close();
+
+			System.out.println("Input OK  (parsed correctly)");
 		}catch (IOException e) {
 			e.printStackTrace();
 		}finally{

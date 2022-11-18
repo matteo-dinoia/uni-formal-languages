@@ -232,7 +232,7 @@ public class Lexer {
 		Lexer lex = new Lexer();
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("Project/lexer/input-lexer.txt"));
+			br = new BufferedReader(new FileReader("Project/_2_lexer/input.txt"));
 
 			Token tok;
 			do {
@@ -241,7 +241,6 @@ public class Lexer {
 					return;
 				System.out.print(tok + " ");
 			} while (tok.tag != Tag.EOF);
-			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally{
