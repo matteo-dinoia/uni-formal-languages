@@ -1,3 +1,4 @@
+package _1_dfa;
 
 public class _9_Comments {
 	public static final int POZZO = 5;

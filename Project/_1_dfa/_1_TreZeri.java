@@ -1,3 +1,5 @@
+package _1_dfa;
+
 public class _1_TreZeri {
 	public static boolean scan(String s) {
 		int state = 0;

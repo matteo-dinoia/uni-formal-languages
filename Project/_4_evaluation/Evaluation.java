@@ -1,10 +1,7 @@
-package evaluation;
+package _4_evaluation;
 
 import java.io.*;
-import lexer.Lexer;
-import lexer.NumberTok;
-import lexer.Tag;
-import lexer.Token;
+import _2_lexer.*;
 
 public class Evaluation {
 	private Lexer lex;

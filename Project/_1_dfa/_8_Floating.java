@@ -1,3 +1,4 @@
+package _1_dfa;
 
 public class _8_Floating {
 	public static final int POZZO = 10;

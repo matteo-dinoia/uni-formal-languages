@@ -1,3 +1,4 @@
+package _1_dfa;
 
 public class _7_ {
 	public static final int POZZO = 13;

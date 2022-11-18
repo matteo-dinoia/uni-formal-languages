@@ -1,3 +1,4 @@
+package _1_dfa;
 
 public class _2_Identificatori {
 	public static boolean scan(String s) {

@@ -1,3 +1,4 @@
+package _1_dfa;
 
 public class _4_ {
 	public static boolean scan(String s) {

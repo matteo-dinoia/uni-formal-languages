@@ -1,9 +1,7 @@
-package parserold;
+package _3_1_parser_math;
 
 import java.io.*;
-import lexer.Lexer;
-import lexer.Tag;
-import lexer.Token;
+import _2_lexer.*;
 
 public class ParserOld {
 	private Lexer lex;
