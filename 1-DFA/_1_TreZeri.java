@@ -1,4 +1,4 @@
-public class TreZeri {
+public class _1_TreZeri {
 	public static boolean scan(String s) {
 		int state = 0;
 		int i = 0;

@@ -1,5 +1,5 @@
 
-public class Es1p8Floating {
+public class _8_Floating {
 	public static final int POZZO = 10;
 
 	public static boolean scan(String s) {

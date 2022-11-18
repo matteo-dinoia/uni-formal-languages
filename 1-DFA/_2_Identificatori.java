@@ -1,5 +1,5 @@
 
-public class Es1p2Identificatori {
+public class _2_Identificatori {
 	public static boolean scan(String s) {
 		int state = 0;
 		int i = 0;

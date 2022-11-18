@@ -1,5 +1,5 @@
 
-public class Es1p4 {
+public class _4_ {
 	public static boolean scan(String s) {
 		int state = 0;
 		int i = 0;

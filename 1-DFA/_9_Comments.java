@@ -1,5 +1,5 @@
 
-public class Es1p9Comments {
+public class _9_Comments {
 	public static final int POZZO = 5;
 
 	public static boolean scan(String s) {
