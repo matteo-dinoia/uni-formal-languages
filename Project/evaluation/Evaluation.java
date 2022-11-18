@@ -12,6 +12,7 @@ public class Evaluation {
 	private Token look;
 	public boolean silentParser=false;
 
+	/* BASE FUNCTIONS */
 	public Evaluation(Lexer l, BufferedReader br) {
 		this(l, br, false);
 	}
@@ -43,7 +44,8 @@ public class Evaluation {
 			error("syntax error");
 	}
 
-	/* VARIABLE */
+
+	/* VARIABLES */
 	public void start() {
 		switch (look.tag) {
 			case '(':
@@ -144,12 +146,13 @@ public class Evaluation {
 		}
 	}
 
+	/* MAIN */
 	public static void main(String args[]){
 		Lexer lex = new Lexer();
 		BufferedReader br=null;
 		try {
 			//FILE READING
-			final String relativePath="input.txt";   //TODO CHANGE
+			final String relativePath="input.txt";
 			final String absolutePath="Project/evaluation/"+relativePath;
 			br = new BufferedReader(new FileReader(absolutePath));
 
@@ -169,5 +172,4 @@ public class Evaluation {
 			} catch (IOException e) {}
 		}
 	}
-
 }

@@ -302,18 +302,14 @@ public class Parser {
 			parser.prog();
 			System.out.println("Input OK");
 			br.close();
-		} catch (IOException e) {
+		}catch (IOException e) {
 			e.printStackTrace();
 		}finally{
-			if(br!=null){
-				try {
-					br.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			if(br==null)
+				return;
+			try {
+				br.close();
+			} catch (IOException e) {e.printStackTrace();}
 		}
 	}
-
 }
