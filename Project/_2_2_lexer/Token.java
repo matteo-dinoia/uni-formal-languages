@@ -1,4 +1,4 @@
-package _2_lexer;
+package _2_2_lexer;
 
 public class Token {
 	public final int tag;

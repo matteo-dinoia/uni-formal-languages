@@ -1,4 +1,4 @@
-package _2_lexer;
+package _2_2_lexer;
 
 public class Tag {
 	public final static int EOF = -1, NUM = 256, ID = 257, RELOP = 258,
