@@ -1,7 +1,7 @@
 package _3_2_parser;
 
 import java.io.*;
-import _2_2_lexer.*;
+import _2_3_lexer.*;
 
 public class Parser {
 	private Lexer lex;

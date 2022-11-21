@@ -1,0 +1,4 @@
+/* calcolare la velocita‘ */
+assign 300 to d; // distanza
+assign 10 to t; // tempo
+print(* d t)
