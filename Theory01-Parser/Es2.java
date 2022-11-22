@@ -1,5 +1,7 @@
 public class Es2 extends Parser {
-	protected void S() {
+	@Override protected void start(){S(); match('$');}
+
+	private void S() {
 		switch (peek()) {
 			case '[': // S -> [S]S
 				match('[');
@@ -16,6 +18,6 @@ public class Es2 extends Parser {
 	}
 
 	public static void main(String args[]){
-		new Es2().executeTest();
+		new Es2().executeTest(args);
 	}
 }

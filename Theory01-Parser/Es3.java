@@ -1,5 +1,7 @@
 public class Es3 extends Parser {
-	protected void S() {
+	@Override protected void start(){S(); match('$');}
+
+	private void S() {
 		switch (peek()) {
 			case 'a': // S -> XC
 			case 'b':
@@ -13,7 +15,7 @@ public class Es3 extends Parser {
 		}
 	}
 
-	protected void X() {
+	private void X() {
 		switch (peek()) {
 			case 'a': // S -> aXb
 				match('a');
@@ -29,7 +31,7 @@ public class Es3 extends Parser {
 		}
 	}
 
-	protected void C() {
+	private void C() {
 		switch (peek()) {
 			case 'c': // S -> cC
 				match('c');
@@ -43,6 +45,6 @@ public class Es3 extends Parser {
 	}
 
 	public static void main(String args[]){
-		new Es3().executeTest();
+		new Es3().executeTest(args);
 	}
 }

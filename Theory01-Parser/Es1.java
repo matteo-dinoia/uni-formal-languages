@@ -1,5 +1,7 @@
-public class Es1 extends Parser {
-	protected void S() {
+public class Es1 extends Parser{
+	@Override protected void start(){S(); match('$');}
+
+	private void S() {
 		switch (peek()) {
 			case '0': // S -> 0S0
 				match('0');
@@ -20,6 +22,6 @@ public class Es1 extends Parser {
 	}
 
 	public static void main(String args[]){
-		new Es1().executeTest();
+		new Es1().executeTest(args);
 	}
 }

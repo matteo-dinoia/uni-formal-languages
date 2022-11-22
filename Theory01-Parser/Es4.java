@@ -1,5 +1,7 @@
 public class Es4 extends Parser {
-	protected void S() {
+	@Override protected void start(){S(); match('$');}
+
+	private void S() {
 		char peeked=peek();
 		switch (peeked) {
 			case '0': // S -> 0...9
@@ -30,6 +32,6 @@ public class Es4 extends Parser {
 	}
 
 	public static void main(String args[]){
-		new Es4().executeTest();
+		new Es4().executeTest(args);
 	}
 }

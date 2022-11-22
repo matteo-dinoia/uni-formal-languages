@@ -1,7 +1,7 @@
 public class Cap4_3Es2 extends Parser {
+	@Override protected void start(){S(); match('$');}
 
-	@Override
-	protected void S() {
+	private void S() {
 		E();
 	}
 
@@ -83,6 +83,6 @@ public class Cap4_3Es2 extends Parser {
 	}
 
 	public static void main(String args[]){
-		new Cap4_3Es2().executeTest();
+		new Cap4_3Es2().executeTest(args);
 	}
 }
