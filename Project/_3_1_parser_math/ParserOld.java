@@ -28,8 +28,8 @@ public class ParserOld {
 			System.out.println("token = " + look);
 	}
 
-	void error(String s) { /* print error messange */
-		throw new Error("near line " + lex.line + ": " + s);
+	Error error(String s) { /* print error messange */
+		return new Error("near line " + lex.line + ": " + s);
 	}
 
 	void match(int t) {
@@ -37,7 +37,7 @@ public class ParserOld {
 			if (look.tag != Tag.EOF)
 				move();
 		} else
-			error("syntax error");
+			throw error("syntax error");
 	}
 
 	/* VARIABLE */
@@ -50,7 +50,7 @@ public class ParserOld {
 				match(Tag.EOF);
 				break;
 			default:
-				error("wrong caracter: "+look+" in start with guide {(, NUM}");
+				throw error("wrong caracter: "+look+" in start with guide {(, NUM}");
 		}
 	}
 
@@ -63,7 +63,7 @@ public class ParserOld {
 				exprp();
 				break;
 			default:
-				error("wrong caracter: "+look+" in expr with guide {(, NUM}");
+				throw error("wrong caracter: "+look+" in expr with guide {(, NUM}");
 		}
 	}
 
@@ -83,7 +83,7 @@ public class ParserOld {
 			case Tag.EOF:
 				break;
 			default:
-				error("wrong caracter: "+look+" in exprp with guide {+,-,9,EOF}");
+				throw error("wrong caracter: "+look+" in exprp with guide {+,-,9,EOF}");
 		}
 	}
 
@@ -96,7 +96,7 @@ public class ParserOld {
 				termp();
 				break;
 			default:
-				error("wrong caracter: "+look+" in term with guide {(, NUM}");
+				throw error("wrong caracter: "+look+" in term with guide {(, NUM}");
 		}
 	}
 
@@ -118,7 +118,7 @@ public class ParserOld {
 			case '-':
 				break;
 			default:
-				error("wrong caracter: "+look+" in termp with guide {*, /, ), EOF}");
+				throw error("wrong caracter: "+look+" in termp with guide {*, /, ), EOF}");
 		}
 	}
 
@@ -133,7 +133,7 @@ public class ParserOld {
 				match(Tag.NUM);
 				break;
 			default:
-				error("wrong caracter: "+look+" in fact with guide {(, NUM}");
+				throw error("wrong caracter: "+look+" in fact with guide {(, NUM}");
 		}
 	}
 

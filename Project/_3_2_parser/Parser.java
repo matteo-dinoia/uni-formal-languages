@@ -27,8 +27,8 @@ public class Parser {
 			System.out.println("token = " + look);
 	}
 
-	private void error(String s) { /* print error messange */
-		throw new Error("near line " + lex.line + ", at symbol "+look.tag+ ": " + s);
+	private Error error(String s) { /* print error messange */
+		return new Error("near line " + lex.line + ", at symbol "+look.tag+ ": " + s);
 	}
 
 	private void match(int t) {
@@ -36,7 +36,7 @@ public class Parser {
 			if (look.tag != Tag.EOF)
 				move();
 		} else
-			error("syntax error");
+			throw error("syntax error");
 	}
 
 	//VARIABLE
@@ -49,10 +49,10 @@ public class Parser {
 		case Tag.COND:
 		case '{':
 			statlist();
-			statlistp();
+			match(Tag.EOF);
 			break;
 		default:
-			error("in statlist");
+			throw error("in statlist");
 		}
 	}
 
@@ -68,7 +68,7 @@ public class Parser {
 			statlistp();
 			break;
 		default:
-			error("in statlist");
+			throw error("in statlist");
 		}
 	}
 
@@ -83,7 +83,7 @@ public class Parser {
 		case '}':
 			break;
 		default:
-			error("in statlistp");
+			throw error("in statlistp");
 		}
 	}
 
@@ -128,7 +128,7 @@ public class Parser {
 			match('}');
 			break;
 		default:
-			error("in stat");
+			throw error("in stat");
 		}
 	}
 
@@ -141,7 +141,7 @@ public class Parser {
 		case Tag.END:
 			break;
 		default:
-			error("in idlist");
+			throw error("in idlist");
 		}
 	}
 
@@ -152,7 +152,7 @@ public class Parser {
 			idlistp();
 			break;
 		default:
-			error("in idlist");
+			throw error("in idlist");
 		}
 	}
 
@@ -171,7 +171,7 @@ public class Parser {
 		case ';':
 			break;
 		default:
-			error("in idlistp");
+			throw error("in idlistp");
 		}
 	}
 
@@ -182,7 +182,7 @@ public class Parser {
 			optlistp();
 			break;
 		default:
-			error("in optlist");
+			throw error("in optlist");
 		}
 	}
 
@@ -195,7 +195,7 @@ public class Parser {
 		case ']':
 			break;
 		default:
-			error("in optlistp");
+			throw error("in optlistp");
 		}
 	}
 
@@ -210,7 +210,7 @@ public class Parser {
 			stat();
 			break;
 		default:
-			error("in optitem");
+			throw error("in optitem");
 		}
 	}
 
@@ -222,7 +222,7 @@ public class Parser {
 			expr();
 			break;
 		default:
-			error("in bexpr");
+			throw error("in bexpr");
 		}
 	}
 
@@ -257,7 +257,7 @@ public class Parser {
 			match(Tag.ID);
 			break;
 		default:
-			error("in expr");
+			throw error("in expr");
 		}
 	}
 
@@ -273,7 +273,7 @@ public class Parser {
 			exprlistp();
 			break;
 		default:
-			error("in exprlist");
+			throw error("in exprlist");
 		}
 	}
 
@@ -288,7 +288,7 @@ public class Parser {
 		case ')':
 			break;
 		default:
-			error("in exprlistp");
+			throw error("in exprlistp");
 		}
 	}
 	public static void main(String args[]){

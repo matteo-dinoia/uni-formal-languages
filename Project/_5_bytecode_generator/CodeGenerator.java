@@ -73,7 +73,7 @@ public class CodeGenerator {
 		+ " .limit locals 256\n";
 
 	private static final String footer = " return\n"
-		+ ".end method\n"
+		+ ".end method"
 		+ "\n"
 		+ ".method public static main([Ljava/lang/String;)V\n"
 		+ " invokestatic Output/run()V\n"
