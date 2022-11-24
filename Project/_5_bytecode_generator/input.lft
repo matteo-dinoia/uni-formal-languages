@@ -7,9 +7,7 @@ while(<= c a){
 	assign *(res, c) to res;
 	assign +(1, c) to c;
 	print[res]
-}*/
-
-/*
+}
 read[a];
 read[b];
 read[c];
@@ -38,5 +36,29 @@ conditional[
 ]else print[33] end;
 
 print[a, b, c];
-print[+(a,b,c)]*/
+print[+(a,b,c)]
 
+
+read[a];
+read[b];
+while (<> a b)
+	conditional [ option (> a b) do assign - a b to a ]
+	else assign - b a to b end;
+print[a]*/
+
+assign 10 to a;
+assign 10 to b;
+print[a,b];
+read[x];
+read[y];
+print[x, y];
+print[1,+(2,3,4)];
+conditional [
+	option (> x y) do print[x]
+	option (== x y) do print[x,y]
+	]
+	else print[y] end;
+while (> x 0) {
+	assign - x 1 to x;
+	print[x]
+}

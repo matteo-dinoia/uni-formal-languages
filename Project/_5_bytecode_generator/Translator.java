@@ -45,9 +45,6 @@ public class Translator {
 		case Tag.WHILE:
 		case Tag.COND:
 		case '{':
-			/*int lnext_prog = code.newLabel();
-			statlist(lnext_prog);
-			code.emitLabel(lnext_prog);*/
 			statlist();
 			match(Tag.EOF);
 			break;
@@ -357,7 +354,7 @@ public class Translator {
 	public static void main(String args[]){
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("_5_bytecode_generator/input.txt"));
+			br = new BufferedReader(new FileReader("_5_bytecode_generator/input.lft"));
 
 			Translator translator = new Translator(new Lexer(), br);
 			translator.prog();
