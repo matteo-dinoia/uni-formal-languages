@@ -38,7 +38,7 @@ public class Evaluation {
 			if (look.tag != Tag.EOF)
 				move();
 		} else
-			error("syntax error");
+			throw error("syntax error");
 	}
 
 
