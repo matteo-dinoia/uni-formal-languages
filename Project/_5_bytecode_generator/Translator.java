@@ -12,6 +12,7 @@ public class Translator {
 	CodeGenerator code = new CodeGenerator();
 	int count=0;
 
+	//MAIN METHODS
 	public Translator(Lexer l, BufferedReader br) {
 		lex = l;
 		pbr = br;
@@ -33,6 +34,7 @@ public class Translator {
 		} else
 			throw error("syntax error");
 	}
+
 
 	// DA PARSER
 	public void prog(){
@@ -75,7 +77,6 @@ public class Translator {
 			throw error("in statlist");
 		}
 	}
-
 	private void statlistp() {
 		switch(look.tag){
 		case ';':
@@ -161,33 +162,37 @@ public class Translator {
 		case Tag.END:
 			break;
 		default:
-			throw error("in idlist");
+			throw error("in conditionalp");
 		}
 	}
 
 	private int idlist(){ //TODO REMOVE -> rendo lista
 		switch(look.tag){
 		case Tag.ID:
-			//ADDED
 			int id_addr = st.lookupAddress(((Word)look).lexeme);
 			if (id_addr==-1) {
 				id_addr = count;
 				st.insert(((Word)look).lexeme,count++);
 			}
-			//ADDED
 			match(Tag.ID);
+
 			idlistp();
 			return id_addr;
 		default:
 			throw error("in idlist");
 		}
 	}
-
-	private void idlistp(){
+	private void idlistp(){//same
 		switch(look.tag){
 		case ',':
 			match(',');
+			int id_addr = st.lookupAddress(((Word)look).lexeme);
+			if (id_addr==-1) {
+				id_addr = count;
+				st.insert(((Word)look).lexeme,count++);
+			}
 			match(Tag.ID);
+
 			idlistp();
 			break;
 		case ']':
@@ -214,7 +219,6 @@ public class Translator {
 			throw error("in optlist");
 		}
 	}
-
 	private void optlistp(int lafter_else){
 		switch(look.tag){
 		case Tag.OPTION:
@@ -252,12 +256,20 @@ public class Translator {
 	private void bexpr(int ltrue, int lfalse){
 		switch(look.tag){
 		case Tag.RELOP:
-			//Token lookRelop=look;
+			String type=((Word)look).lexeme;
 			match(Tag.RELOP);
 			expr();
 			expr();
-			code.emit(OpCode.if_icmple, ltrue);
+
+			if(type.equals("<")) code.emit(OpCode.if_icmplt, ltrue);
+			else if(type.equals("<=")) code.emit(OpCode.if_icmple, ltrue);
+			else if(type.equals("==")) code.emit(OpCode.if_icmpeq, ltrue);
+			else if(type.equals(">=")) code.emit(OpCode.if_icmpge, ltrue);
+			else if(type.equals(">")) code.emit(OpCode.if_icmpgt, ltrue);
+			else if(type.equals("<>")) code.emit(OpCode.if_icmpne, ltrue);
+			else throw error("in bexpr");
 			code.emit(OpCode.GOto, lfalse);
+
 			break;
 		default:
 			throw error("in bexpr");
@@ -269,6 +281,7 @@ public class Translator {
 		case '+':
 			match('+');
 			match('(');
+			code.emit(OpCode.ldc, 0);
 			exprlist(OpCode.iadd, -1);
 			match(')');
 			//in extrplist
@@ -276,6 +289,7 @@ public class Translator {
 		case '*':
 			match('*');
 			match('(');
+			code.emit(OpCode.ldc, 1);
 			exprlist(OpCode.imul, -1);
 			match(')');
 			//in extrplist
@@ -306,7 +320,7 @@ public class Translator {
 		}
 	}
 
-	private void exprlist(OpCode operationCode, int operand){
+	private void exprlist(OpCode operationCode, int operand){ //TODO Fa Operazione extra
 		switch(look.tag){
 		case '+':
 		case '-':
@@ -315,14 +329,14 @@ public class Translator {
 		case Tag.NUM:
 		case Tag.ID:
 			expr();
+			code.emit(operationCode, operand);
 			exprlistp(operationCode, operand);
 			break;
 		default:
 			throw error("in exprlist");
 		}
 	}
-
-	private void exprlistp(OpCode operationCode, int operand){
+	private void exprlistp(OpCode operationCode, int operand){//same
 		switch(look.tag){
 		case ',':
 			match(',');
@@ -339,6 +353,7 @@ public class Translator {
 	}
 
 
+	//TESTING
 	public static void main(String args[]){
 		BufferedReader br=null;
 		try {

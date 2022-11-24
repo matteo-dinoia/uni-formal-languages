@@ -141,7 +141,7 @@ public class Parser {
 		case Tag.END:
 			break;
 		default:
-			throw error("in idlist");
+			throw error("in conditionalp");
 		}
 	}
 
