@@ -36,6 +36,4 @@ conditional[
 	}
 ]else print[33] end;
 
-print[a];
-print[b];
-print[c]
+print[a, b, c]

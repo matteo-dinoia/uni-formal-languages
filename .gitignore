@@ -1,3 +1,6 @@
 .vscode
+
+#JAVA
 *.class
 *.jar
+*.j

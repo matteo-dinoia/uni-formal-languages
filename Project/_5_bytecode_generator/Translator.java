@@ -35,7 +35,7 @@ public class Translator {
 	}
 
 	// DA PARSER
-	public void prog(){ //JUST ADDED GUIDE
+	public void prog(){
 		switch(look.tag){
 		case Tag.ASSIGN:
 		case Tag.PRINT:
@@ -104,9 +104,8 @@ public class Translator {
 		case Tag.PRINT:
 			match(Tag.PRINT);
 			match('[');
-			exprlist();
+			exprlist(OpCode.invokestatic, 1);
 			match(']');
-			code.emit(OpCode.invokestatic, 1);
 			break;
 		case Tag.READ:
 			match(Tag.READ);
@@ -270,18 +269,16 @@ public class Translator {
 		case '+':
 			match('+');
 			match('(');
-			exprlist();
+			exprlist(OpCode.iadd, -1);
 			match(')');
-			code.emit(OpCode.iadd); //Operation
-			//manca
+			//in extrplist
 			break;
 		case '*':
 			match('*');
 			match('(');
-			exprlist();
+			exprlist(OpCode.imul, -1);
 			match(')');
-			code.emit(OpCode.imul); //Operation
-			//manca
+			//in extrplist
 			break;
 		case '-':
 			match('-');
@@ -309,7 +306,7 @@ public class Translator {
 		}
 	}
 
-	private void exprlist(){
+	private void exprlist(OpCode operationCode, int operand){
 		switch(look.tag){
 		case '+':
 		case '-':
@@ -318,19 +315,20 @@ public class Translator {
 		case Tag.NUM:
 		case Tag.ID:
 			expr();
-			exprlistp();
+			exprlistp(operationCode, operand);
 			break;
 		default:
 			throw error("in exprlist");
 		}
 	}
 
-	private void exprlistp(){
+	private void exprlistp(OpCode operationCode, int operand){
 		switch(look.tag){
 		case ',':
 			match(',');
 			expr();
-			exprlistp();
+			code.emit(operationCode, operand);
+			exprlistp(operationCode, operand);
 			break;
 		case ']':
 		case ')':
