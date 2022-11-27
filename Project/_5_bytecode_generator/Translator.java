@@ -96,8 +96,8 @@ public class Translator {
 			match(Tag.ASSIGN);
 			expr();
 			match(Tag.TO);
-			int id=idlist();
-			code.emit(OpCode.istore, id);
+			idlist(OpCode.dup, 0);
+			code.emit(OpCode.pop);
 			break;
 		case Tag.PRINT:
 			match(Tag.PRINT);
@@ -108,11 +108,8 @@ public class Translator {
 		case Tag.READ:
 			match(Tag.READ);
 			match('[');
-			int id2=idlist();
+			idlist(OpCode.invokestatic, 0);
 			match(']');
-
-			code.emit(OpCode.invokestatic, 0);
-			code.emit(OpCode.istore, id2);
 			break;
 		case Tag.WHILE:
 			lstart=code.newLabel(); lblock=code.newLabel(); lend=code.newLabel();
@@ -163,7 +160,7 @@ public class Translator {
 		}
 	}
 
-	private int idlist(){ //TODO REMOVE -> rendo lista
+	private void idlist(OpCode opCode, int parameter){ //TODO REMOVE -> rendo lista
 		switch(look.tag){
 		case Tag.ID:
 			int id_addr = st.lookupAddress(((Word)look).lexeme);
@@ -171,15 +168,17 @@ public class Translator {
 				id_addr = count;
 				st.insert(((Word)look).lexeme,count++);
 			}
-			match(Tag.ID);
+			code.emit(opCode, parameter);
+			code.emit(OpCode.istore, id_addr);
 
-			idlistp();
-			return id_addr;
+			match(Tag.ID);
+			idlistp(opCode, parameter);
+			break;
 		default:
 			throw error("in idlist");
 		}
 	}
-	private void idlistp(){//same
+	private void idlistp(OpCode opCode, int parameter){//same
 		switch(look.tag){
 		case ',':
 			match(',');
@@ -188,9 +187,11 @@ public class Translator {
 				id_addr = count;
 				st.insert(((Word)look).lexeme,count++);
 			}
-			match(Tag.ID);
+			code.emit(opCode, parameter);
+			code.emit(OpCode.istore, id_addr);
 
-			idlistp();
+			match(Tag.ID);
+			idlistp(opCode, parameter);
 			break;
 		case ']':
 		case '}':

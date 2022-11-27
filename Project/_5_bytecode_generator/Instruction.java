@@ -40,6 +40,9 @@ public class Instruction {
 			case ifne : temp = " ifne L" + operand + "\n"; break;
 			case GOto : temp = " goto L" + operand + "\n" ; break;
 			case label : temp = "L" + operand + ":\n"; break;
+			//mine
+			case dup: temp = "dup"+"\n"; break;
+			case pop: temp = "pop"+"\n"; break;
 		}
 		return temp;
 	}
