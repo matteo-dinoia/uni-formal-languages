@@ -89,14 +89,14 @@ public class Translator {
 		}
 	}
 
-	private void stat() {
+	private void stat() {  //MI SA CHE NECESSARIO POP
 		int lstart, lblock, lend;
 		switch(look.tag){
 		case Tag.ASSIGN:
 			match(Tag.ASSIGN);
 			expr();
 			match(Tag.TO);
-			idlist(OpCode.dup, 0);
+			idlist(OpCode.dup, -1);
 			code.emit(OpCode.pop);
 			break;
 		case Tag.PRINT:
@@ -112,14 +112,14 @@ public class Translator {
 			match(']');
 			break;
 		case Tag.WHILE:
-			lstart=code.newLabel(); lblock=code.newLabel(); lend=code.newLabel();
+			lstart=code.newLabel(); lend=code.newLabel(); //lblock=code.newLabel();
 			match(Tag.WHILE);
 			match('(');
 
 			code.emitLabel(lstart);
-			bexpr(lblock, lend);
+			bexpr(null, lend);
 
-			code.emitLabel(lblock);
+			//code.emitLabel(lblock);
 			match(')');
 			stat();
 			code.emit(OpCode.GOto, lstart);
@@ -237,12 +237,12 @@ public class Translator {
 		case Tag.OPTION:
 			match(Tag.OPTION);
 			match('(');
-			int block=code.newLabel();
-			bexpr(block, next);
+			//int block=code.newLabel();
+			bexpr(null, next);
 			match(')');
 
 			match(Tag.DO);
-			code.emitLabel(block);
+			//code.emitLabel(block);
 			stat();
 			code.emit(OpCode.GOto, lafter_else);
 			break;
@@ -251,7 +251,7 @@ public class Translator {
 		}
 	}
 
-	private void bexpr(int ltrue, int lfalse){
+	private void bexpr(Integer ltrue, Integer lfalse){ //Maybe tolgo roba extra
 		switch(look.tag){
 		case Tag.RELOP:
 			String type=((Word)look).lexeme;
@@ -259,14 +259,32 @@ public class Translator {
 			expr();
 			expr();
 
-			if(type.equals("<")) code.emit(OpCode.if_icmplt, ltrue);
-			else if(type.equals("<=")) code.emit(OpCode.if_icmple, ltrue);
-			else if(type.equals("==")) code.emit(OpCode.if_icmpeq, ltrue);
-			else if(type.equals(">=")) code.emit(OpCode.if_icmpge, ltrue);
-			else if(type.equals(">")) code.emit(OpCode.if_icmpgt, ltrue);
-			else if(type.equals("<>")) code.emit(OpCode.if_icmpne, ltrue);
-			else throw error("in bexpr");
-			code.emit(OpCode.GOto, lfalse);
+			OpCode typeCode;
+			if(ltrue!=null){
+				if(type.equals("<")) typeCode=OpCode.if_icmplt;
+				else if(type.equals("<=")) typeCode=OpCode.if_icmple;
+				else if(type.equals("==")) typeCode=OpCode.if_icmpeq;
+				else if(type.equals("<>")) typeCode=OpCode.if_icmpne;
+				else if(type.equals(">=")) typeCode=OpCode.if_icmpge;
+				else if(type.equals(">")) typeCode=OpCode.if_icmpgt;
+				else throw error("in bexpr");
+
+				code.emit(typeCode, ltrue);
+				if(lfalse!=null)code.emit(OpCode.GOto, lfalse);
+			}
+			else if (lfalse!=null){
+				//Opposite
+				if(type.equals("<")) typeCode=OpCode.if_icmpge;
+				else if(type.equals("<=")) typeCode=OpCode.if_icmpgt;
+				else if(type.equals("==")) typeCode=OpCode.if_icmpne;
+				else if(type.equals("<>")) typeCode=OpCode.if_icmpeq;
+				else if(type.equals(">=")) typeCode=OpCode.if_icmplt;
+				else if(type.equals(">")) typeCode=OpCode.if_icmple;
+				else throw error("in bexpr");
+
+				code.emit(typeCode, lfalse);
+			}
+
 
 			break;
 		default:
@@ -279,7 +297,7 @@ public class Translator {
 		case '+':
 			match('+');
 			match('(');
-			code.emit(OpCode.ldc, 0);
+			//code.emit(OpCode.ldc, 0);
 			exprlist(OpCode.iadd, -1);
 			match(')');
 			//in extrplist
@@ -287,7 +305,7 @@ public class Translator {
 		case '*':
 			match('*');
 			match('(');
-			code.emit(OpCode.ldc, 1);
+			//code.emit(OpCode.ldc, 1);
 			exprlist(OpCode.imul, -1);
 			match(')');
 			//in extrplist
@@ -327,7 +345,8 @@ public class Translator {
 		case Tag.NUM:
 		case Tag.ID:
 			expr();
-			code.emit(operationCode, operand);
+			if(operationCode==OpCode.invokestatic) // if is print
+				code.emit(operationCode, operand);
 			exprlistp(operationCode, operand);
 			break;
 		default:
