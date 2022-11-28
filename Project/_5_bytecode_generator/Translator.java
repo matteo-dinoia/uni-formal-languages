@@ -90,7 +90,7 @@ public class Translator {
 	}
 
 	private void stat() {  //MI SA CHE NECESSARIO POP
-		int lstart, lblock, lend;
+		int lstart, lend; //int lblock;
 		switch(look.tag){
 		case Tag.ASSIGN:
 			match(Tag.ASSIGN);
