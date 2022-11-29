@@ -2,7 +2,9 @@ package _5_2_bytecode_boolean;
 
 import _2_lexer.*;
 import java.io.*;
-import _5_1_bytecode_generator.*;
+import _5_1_bytecode_generator.SymbolTable;
+import _5_1_bytecode_generator.CodeGenerator;
+import _5_1_bytecode_generator.OpCode;
 
 public class Translator {
 	private Lexer lex;
