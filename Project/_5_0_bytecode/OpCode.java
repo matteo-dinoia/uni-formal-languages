@@ -20,8 +20,8 @@ public enum OpCode {
 		}
 	}
 
-	public static OpCode getOppositCode(OpCode code){
-		switch(code){
+	public OpCode getOpposite(){
+		switch(this){
 			case if_icmpne: return if_icmpeq;
 			case if_icmpeq: return if_icmpne;
 
