@@ -92,7 +92,7 @@ public class Translator {
 	}
 
 	private void stat() {
-		int lstart, lend;
+		int lstart, lend, lcontinue;
 		switch(look.tag){
 		case Tag.ASSIGN:
 			match(Tag.ASSIGN);
@@ -113,12 +113,13 @@ public class Translator {
 			match(']');
 			break;
 		case Tag.WHILE:
-			lstart=code.newLabel(); lend=code.newLabel();
+			lstart=code.newLabel(); lend=code.newLabel(); lcontinue=code.newLabel();
 			match(Tag.WHILE);
 			match('(');
 
 			code.emitLabel(lstart);
-			bexpr(null, lend);
+			bexpr(lcontinue, lend);
+			code.emitLabel(lcontinue);
 
 			match(')');
 			stat();
@@ -160,7 +161,7 @@ public class Translator {
 		}
 	}
 
-	private void idlist(OpCode opCode, int parameter){ //TODO REMOVE -> rendo lista
+	private void idlist(OpCode opCode, int parameter){
 		switch(look.tag){
 		case Tag.ID:
 			int id_addr = st.lookupAddress(((Word)look).lexeme);
@@ -170,7 +171,7 @@ public class Translator {
 			}
 			match(Tag.ID);
 
-			if(opCode!=OpCode.dup || look.tag==',')
+			if(opCode!=OpCode.dup || look.tag==',') //if assign and is last element
 				code.emit(opCode, parameter);
 			code.emit(OpCode.istore, id_addr);
 			idlistp(opCode, parameter);
@@ -179,7 +180,7 @@ public class Translator {
 			throw error("in idlist");
 		}
 	}
-	private void idlistp(OpCode opCode, int parameter){//same
+	private void idlistp(OpCode opCode, int parameter){
 		switch(look.tag){
 		case ',':
 			match(',');
@@ -190,7 +191,7 @@ public class Translator {
 			}
 			match(Tag.ID);
 
-			if(opCode!=OpCode.dup || look.tag==',')
+			if(opCode!=OpCode.dup || look.tag==',') //if assign and is last element
 				code.emit(opCode, parameter);
 			code.emit(OpCode.istore, id_addr);
 			idlistp(opCode, parameter);
@@ -239,12 +240,12 @@ public class Translator {
 		case Tag.OPTION:
 			match(Tag.OPTION);
 			match('(');
-			//int block=code.newLabel();
-			bexpr(null, next);
+			int lcontinue=code.newLabel();
+			bexpr(lcontinue, next);
+			code.emitLabel(lcontinue);
 			match(')');
 
 			match(Tag.DO);
-			//code.emitLabel(block);
 			stat();
 			code.emit(OpCode.GOto, lafter_else);
 			break;
@@ -253,7 +254,7 @@ public class Translator {
 		}
 	}
 
-	private void bexpr(Integer ltrue, Integer lfalse){ //Maybe tolgo roba extra
+	private void bexpr(int ltrue, int lfalse){
 		switch(look.tag){
 		case Tag.RELOP:
 			String type=((Word)look).lexeme;
@@ -261,33 +262,8 @@ public class Translator {
 			expr();
 			expr();
 
-			OpCode typeCode;
-			if(ltrue!=null){
-				if(type.equals("<")) typeCode=OpCode.if_icmplt;
-				else if(type.equals("<=")) typeCode=OpCode.if_icmple;
-				else if(type.equals("==")) typeCode=OpCode.if_icmpeq;
-				else if(type.equals("<>")) typeCode=OpCode.if_icmpne;
-				else if(type.equals(">=")) typeCode=OpCode.if_icmpge;
-				else if(type.equals(">")) typeCode=OpCode.if_icmpgt;
-				else throw error("in bexpr");
-
-				code.emit(typeCode, ltrue);
-				if(lfalse!=null)code.emit(OpCode.GOto, lfalse);
-			}
-			else if (lfalse!=null){
-				//Opposite
-				if(type.equals("<")) typeCode=OpCode.if_icmpge;
-				else if(type.equals("<=")) typeCode=OpCode.if_icmpgt;
-				else if(type.equals("==")) typeCode=OpCode.if_icmpne;
-				else if(type.equals("<>")) typeCode=OpCode.if_icmpeq;
-				else if(type.equals(">=")) typeCode=OpCode.if_icmplt;
-				else if(type.equals(">")) typeCode=OpCode.if_icmple;
-				else throw error("in bexpr");
-
-				code.emit(typeCode, lfalse);
-			}
-
-
+			code.emit(OpCode.getCodeFromRelop(type), ltrue);
+			code.emit(OpCode.GOto, lfalse);
 			break;
 		default:
 			throw error("in bexpr");
@@ -299,30 +275,26 @@ public class Translator {
 		case '+':
 			match('+');
 			match('(');
-			//code.emit(OpCode.ldc, 0);
 			exprlist(OpCode.iadd, -1);
 			match(')');
-			//in extrplist
 			break;
 		case '*':
 			match('*');
 			match('(');
-			//code.emit(OpCode.ldc, 1);
 			exprlist(OpCode.imul, -1);
 			match(')');
-			//in extrplist
 			break;
 		case '-':
 			match('-');
 			expr();
 			expr();
-			code.emit(OpCode.isub); //Operation
+			code.emit(OpCode.isub);
 			break;
 		case '/':
 			match('/');
 			expr();
 			expr();
-			code.emit(OpCode.idiv); //Operation
+			code.emit(OpCode.idiv);
 			break;
 		case Tag.NUM:
 			code.emit(OpCode.ldc, ((NumberTok)look).getValue());
@@ -338,7 +310,7 @@ public class Translator {
 		}
 	}
 
-	private void exprlist(OpCode operationCode, int operand){ //TODO Fa Operazione extra
+	private void exprlist(OpCode operationCode, int operand){
 		switch(look.tag){
 		case '+':
 		case '-':
@@ -355,7 +327,7 @@ public class Translator {
 			throw error("in exprlist");
 		}
 	}
-	private void exprlistp(OpCode operationCode, int operand){//same
+	private void exprlistp(OpCode operationCode, int operand){
 		switch(look.tag){
 		case ',':
 			match(',');
@@ -376,7 +348,7 @@ public class Translator {
 	public static void main(String args[]){
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("_5_1_bytecode_generator/input.lft"));
+			br = new BufferedReader(new FileReader("_5_1_translator_generator/input.lft"));
 
 			Translator translator = new Translator(new Lexer(), br);
 			translator.prog();
