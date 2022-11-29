@@ -1,19 +1,20 @@
 package _3_1_parser_math;
 
 import java.io.*;
-import _2_3_lexer.*;
 
-public class ParserOld {
+import _2_lexer.*;
+
+public class Parser {
 	private Lexer lex;
 	private BufferedReader pbr;
 	private Token look;
 	public boolean silentParser=false;
 
-	public ParserOld(Lexer l, BufferedReader br) {
+	public Parser(Lexer l, BufferedReader br) {
 		this(l, br, false);
 	}
 
-	public ParserOld(Lexer l, BufferedReader br, boolean silentParser) {
+	public Parser(Lexer l, BufferedReader br, boolean silentParser) {
 		this.silentParser=silentParser;
 
 		lex = l;
@@ -142,7 +143,7 @@ public class ParserOld {
 		try {
 			br = new BufferedReader(new FileReader("Project/_3_1_parser_math/input.txt"));
 
-			ParserOld parser = new ParserOld(new Lexer(), br);
+			Parser parser = new Parser(new Lexer(), br);
 			parser.start();
 
 			System.out.println("Input OK  (parsed correctly)");

@@ -1,7 +1,8 @@
 package _4_evaluation;
 
 import java.io.*;
-import _2_3_lexer.*;
+
+import _2_lexer.*;
 
 public class Evaluation {
 	private Lexer lex;

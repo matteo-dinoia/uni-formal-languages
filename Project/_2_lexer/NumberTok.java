@@ -1,4 +1,4 @@
-package _2_1_lexer_old;
+package _2_lexer;
 
 public class NumberTok extends Token {
 	private int value;

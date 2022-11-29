@@ -1,4 +1,4 @@
-package _5_bytecode_generator;
+package _5_1_bytecode_generator;
 
 public enum OpCode {
 	ldc, imul, ineg, idiv, iadd,

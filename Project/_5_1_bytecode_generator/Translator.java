@@ -1,6 +1,6 @@
-package _5_bytecode_generator;
+package _5_1_bytecode_generator;
 
-import _2_3_lexer.*;
+import _2_lexer.*;
 import java.io.*;
 
 public class Translator {

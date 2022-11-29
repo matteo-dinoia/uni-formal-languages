@@ -41,15 +41,15 @@ print[+(a,b,c)]
 */
 
 
-/*
+
 read[a,b];
 while (<> a b)
 	conditional [ option (> a b) do assign - a b to a ]
 	else assign - b a to b end;
-print[a];
-*/
+print[a]
 
 
+/*
 print[1,+(2,3,4)];
 assign 10 to a, b;
 read[x, y];
@@ -64,3 +64,4 @@ while (> x 0) {
 };
 
 print[+(x)]
+*/
