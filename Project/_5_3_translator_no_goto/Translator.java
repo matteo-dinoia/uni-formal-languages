@@ -1,10 +1,9 @@
-package _5_2_bytecode_boolean;
+package _5_3_translator_no_goto;
 
 import _2_lexer.*;
+import _5_0_bytecode.*;
+
 import java.io.*;
-import _5_1_bytecode_generator.SymbolTable;
-import _5_1_bytecode_generator.CodeGenerator;
-import _5_1_bytecode_generator.OpCode;
 
 public class Translator {
 	private Lexer lex;
@@ -92,15 +91,14 @@ public class Translator {
 		}
 	}
 
-	private void stat() {  //MI SA CHE NECESSARIO POP
-		int lstart, lend; //int lblock;
+	private void stat() {
+		int lstart, lend;
 		switch(look.tag){
 		case Tag.ASSIGN:
 			match(Tag.ASSIGN);
 			expr();
 			match(Tag.TO);
 			idlist(OpCode.dup, -1);
-			code.emit(OpCode.pop);
 			break;
 		case Tag.PRINT:
 			match(Tag.PRINT);
@@ -115,14 +113,13 @@ public class Translator {
 			match(']');
 			break;
 		case Tag.WHILE:
-			lstart=code.newLabel(); lend=code.newLabel(); //lblock=code.newLabel();
+			lstart=code.newLabel(); lend=code.newLabel();
 			match(Tag.WHILE);
 			match('(');
 
 			code.emitLabel(lstart);
 			bexpr(null, lend);
 
-			//code.emitLabel(lblock);
 			match(')');
 			stat();
 			code.emit(OpCode.GOto, lstart);
@@ -171,10 +168,11 @@ public class Translator {
 				id_addr = count;
 				st.insert(((Word)look).lexeme,count++);
 			}
-			code.emit(opCode, parameter);
-			code.emit(OpCode.istore, id_addr);
-
 			match(Tag.ID);
+
+			if(opCode!=OpCode.dup || look.tag==',')
+				code.emit(opCode, parameter);
+			code.emit(OpCode.istore, id_addr);
 			idlistp(opCode, parameter);
 			break;
 		default:
@@ -190,10 +188,11 @@ public class Translator {
 				id_addr = count;
 				st.insert(((Word)look).lexeme,count++);
 			}
-			code.emit(opCode, parameter);
-			code.emit(OpCode.istore, id_addr);
-
 			match(Tag.ID);
+
+			if(opCode!=OpCode.dup || look.tag==',')
+				code.emit(opCode, parameter);
+			code.emit(OpCode.istore, id_addr);
 			idlistp(opCode, parameter);
 			break;
 		case ']':
@@ -377,7 +376,7 @@ public class Translator {
 	public static void main(String args[]){
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("_5_bytecode_generator/input.lft"));
+			br = new BufferedReader(new FileReader("_5_1_bytecode_generator/input.lft"));
 
 			Translator translator = new Translator(new Lexer(), br);
 			translator.prog();

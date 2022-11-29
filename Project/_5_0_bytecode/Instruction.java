@@ -1,4 +1,4 @@
-package _5_1_bytecode_generator;
+package _5_0_bytecode;
 
 public class Instruction {
 	OpCode opCode;
@@ -42,7 +42,6 @@ public class Instruction {
 			case label : temp = "  L" + operand + ":\n"; break;
 			//mine
 			case dup: temp = "\tdup"+"\n"; break;
-			case pop: temp = "\tpop"+"\n"; break;
 		}
 		return temp;
 	}
