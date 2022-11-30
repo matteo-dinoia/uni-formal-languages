@@ -1,7 +1,4 @@
-package _5_3_translator_no_goto;
-
-import _2_lexer.*;
-import _5_0_bytecode.*;
+package _5_4_;
 
 import java.io.*;
 
@@ -92,7 +89,7 @@ public class Translator {
 	}
 
 	private void stat() {
-		int lstart, lend;
+		int lstart, lend, lcontinue;
 		switch(look.tag){
 		case Tag.ASSIGN:
 			match(Tag.ASSIGN);
@@ -113,12 +110,13 @@ public class Translator {
 			match(']');
 			break;
 		case Tag.WHILE:
-			lstart=code.newLabel(); lend=code.newLabel();
+			lstart=code.newLabel(); lend=code.newLabel(); lcontinue=code.newLabel();
 			match(Tag.WHILE);
 			match('(');
 
 			code.emitLabel(lstart);
-			bexpr(lend, false);
+			bexpr(lcontinue, lend);
+			code.emitLabel(lcontinue);
 
 			match(')');
 			stat();
@@ -239,7 +237,9 @@ public class Translator {
 		case Tag.OPTION:
 			match(Tag.OPTION);
 			match('(');
-			bexpr(next, false);
+			int lcontinue=code.newLabel();
+			bexpr(lcontinue, next);
+			code.emitLabel(lcontinue);
 			match(')');
 
 			match(Tag.DO);
@@ -251,7 +251,7 @@ public class Translator {
 		}
 	}
 
-	private void bexpr(int ljump, boolean jumpIfTrue){
+	private void bexpr(int ltrue, int lfalse){
 		switch(look.tag){
 		case Tag.RELOP:
 			String type=((Word)look).lexeme;
@@ -259,9 +259,8 @@ public class Translator {
 			expr();
 			expr();
 
-			OpCode operCode=OpCode.getCodeFromRelop(type);
-			if(!jumpIfTrue) operCode=operCode.getOpposite();
-			code.emit(operCode, ljump);
+			code.emit(OpCode.getCodeFromRelop(type), ltrue);
+			code.emit(OpCode.GOto, lfalse);
 			break;
 		default:
 			throw error("in bexpr");
@@ -346,7 +345,7 @@ public class Translator {
 	public static void main(String args[]){
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("_5_3_translator_no_goto/input.lft"));
+			br = new BufferedReader(new FileReader("_5_1_translator_generator/input.lft"));
 
 			Translator translator = new Translator(new Lexer(), br);
 			translator.prog();
