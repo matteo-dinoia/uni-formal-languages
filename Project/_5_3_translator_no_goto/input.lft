@@ -1,5 +1,8 @@
 read[a,b,c];
 conditional[
-	option (&& <= b a  <= c a) do print[a]
-	option (&& <= a b <= c b) do print[b]
+	option(! == a b ) do print[a]
+]else print [b] end;
+conditional[
+	option (!|| <= b a  <= c a) do print[a]
+	option (!|| <= a b <= c b) do print[b]
 	] else print[c] end

@@ -263,20 +263,23 @@ public class Translator {
 			if(!jumpIfTrue) operCode=operCode.getOpposite();
 			code.emit(operCode, ljump);
 			break;
-		case Tag.AND:
+		/*case Tag.AND:
 			match(Tag.AND);
+			if(jumpIfTrue){
+
+			}
 			bexpr(ljump, jumpIfTrue); // check
 			bexpr(ljump, jumpIfTrue);
 			break;
 		case Tag.OR:
 			match(Tag.OR);
-			bexpr(ljump, jumpIfTrue);  //Check
-			bexpr(ljump, jumpIfTrue);
+			bexpr(ljump, !jumpIfTrue);  //Check -> need block?
+			bexpr(ljump, !jumpIfTrue);
 			break;
 		case '!':
 			match('!');
 			bexpr(ljump, !jumpIfTrue);
-			break;
+			break;*/
 		default:
 			throw error("in bexpr");
 		}
