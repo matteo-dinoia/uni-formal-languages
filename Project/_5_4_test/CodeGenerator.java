@@ -1,4 +1,4 @@
-package _5_4_;
+package _5_4_test;
 
 import java.util.LinkedList;
 import java.io.*;

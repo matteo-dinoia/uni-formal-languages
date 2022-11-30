@@ -1,4 +1,4 @@
-package _5_4_;
+package _5_4_test;
 
 public enum OpCode {
 	ldc, imul, ineg, idiv, iadd,

@@ -1,4 +1,4 @@
-package _5_4_;
+package _5_4_test;
 
 public class NumberTok extends Token {
 	private int value;
