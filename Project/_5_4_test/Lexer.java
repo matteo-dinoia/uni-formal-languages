@@ -1,8 +1,6 @@
 package _5_4_test;
 
 import java.io.*;
-
-import _2_lexer.Tag;
 import _5_4_a.Token;
 
 public abstract class Lexer {
