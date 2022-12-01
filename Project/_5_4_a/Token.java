@@ -1,4 +1,4 @@
-package _5_4_test;
+package _5_4_a;
 
 public class Token {
 	public final int tag;
@@ -7,8 +7,7 @@ public class Token {
 		tag = t;
 	}
 
-	@Override
-	public String toString() {
+	@Override public String toString() {
 		return "<" + tag + ">";
 	}
 

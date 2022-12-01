@@ -1,30 +1,59 @@
-package _5_4_test;
+package _5_4_z;
 
-import java.util.LinkedList;
+import java.util.*;
+
+import _5_4_a.Instruction;
+import _5_4_a.OpCode;
+
 import java.io.*;
 
 public class CodeGenerator {
+	private LinkedList <Instruction> instructions = new LinkedList <Instruction>();
+	private int label=0;
 
-	LinkedList <Instruction> instructions = new LinkedList <Instruction>();
-
-	int label=0;
-
+	//CODE EMISSIONS
 	public void emit(OpCode opCode) {
 		instructions.add(new Instruction(opCode));
 	}
-
-	public void emit(OpCode opCode , int operand) {
+	public void emit(OpCode opCode , Integer operand) {
 		instructions.add(new Instruction(opCode, operand));
 	}
 
+	//LABEL
 	public void emitLabel(int operand) {
 		emit(OpCode.label, operand);
 	}
-
 	public int newLabel() {
 		return label++;
 	}
 
+	//VARIABLES
+	int countVariable = 0;
+	Map <String, Integer> OffsetMap = new HashMap <String,Integer>();
+	public int getVariableOrCreate(String name){
+		Integer id_addr = getExistingVariable(name);
+		if (id_addr != null)
+			return id_addr;
+
+
+		initializeVariable(name, countVariable);
+		return countVariable++;
+	}
+	private void initializeVariable(String name, int address) {
+		if(OffsetMap.containsValue(address))
+			throw new Error("Error:reference to a memory location already occupied by another variable");
+
+		OffsetMap.put(name, address);
+	}
+	public Integer getExistingVariable (String name) {
+		if(OffsetMap.containsKey(name))
+			return OffsetMap.get(name);
+
+		return null;
+	}
+
+
+	//PARSING
 	public void toJasmin() throws IOException{
 		PrintWriter out = new PrintWriter(new FileWriter("Output.j"));
 		String temp = "";
@@ -38,7 +67,6 @@ public class CodeGenerator {
 		out.flush();
 		out.close();
 	}
-
 	private static final String header = ".class public Output \n"
 		+ ".super java/lang/Object\n"
 		+ "\n"
@@ -71,7 +99,6 @@ public class CodeGenerator {
 		+ ".method public static run()V\n"
 		+ "\t.limit stack 1024\n"
 		+ "\t.limit locals 256\n";
-
 	private static final String footer = "\treturn\n"
 		+ ".end method"
 		+ "\n\n\n"
