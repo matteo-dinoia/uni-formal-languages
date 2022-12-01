@@ -1,4 +1,4 @@
-package _5_4_z;
+package _5_5_z;
 
 import _5_4_a.*;
 import _5_4_test.*;
