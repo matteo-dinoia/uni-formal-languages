@@ -42,8 +42,7 @@ public class Parser {
 			statlist();
 			match(Tag.EOF);
 			break;
-		default:
-			throw error("in statlist");
+		default: throw error("in statlist");
 		}
 	}
 
@@ -58,8 +57,7 @@ public class Parser {
 			stat();
 			statlistp();
 			break;
-		default:
-			throw error("in statlist");
+		default: throw error("in statlist");
 		}
 	}
 
@@ -73,8 +71,7 @@ public class Parser {
 		case Tag.EOF:
 		case '}':
 			break;
-		default:
-			throw error("in statlistp");
+		default: throw error("in statlistp");
 		}
 	}
 
@@ -118,8 +115,7 @@ public class Parser {
 			statlist();
 			match('}');
 			break;
-		default:
-			throw error("in stat");
+		default: throw error("in stat");
 		}
 	}
 
@@ -131,8 +127,7 @@ public class Parser {
 			break;
 		case Tag.END:
 			break;
-		default:
-			throw error("in conditionalp");
+		default: throw error("in conditionalp");
 		}
 	}
 
@@ -142,8 +137,7 @@ public class Parser {
 			match(Tag.ID);
 			idlistp();
 			break;
-		default:
-			throw error("in idlist");
+		default: throw error("in idlist");
 		}
 	}
 
@@ -161,8 +155,7 @@ public class Parser {
 		case Tag.EOF:
 		case ';':
 			break;
-		default:
-			throw error("in idlistp");
+		default: throw error("in idlistp");
 		}
 	}
 
@@ -172,8 +165,7 @@ public class Parser {
 			optitem();
 			optlistp();
 			break;
-		default:
-			throw error("in optlist");
+		default: throw error("in optlist");
 		}
 	}
 
@@ -185,8 +177,7 @@ public class Parser {
 			break;
 		case ']':
 			break;
-		default:
-			throw error("in optlistp");
+		default: throw error("in optlistp");
 		}
 	}
 
@@ -200,8 +191,7 @@ public class Parser {
 			match(Tag.DO);
 			stat();
 			break;
-		default:
-			throw error("in optitem");
+		default: throw error("in optitem");
 		}
 	}
 
@@ -212,8 +202,7 @@ public class Parser {
 			expr();
 			expr();
 			break;
-		default:
-			throw error("in bexpr");
+		default: throw error("in bexpr");
 		}
 	}
 
@@ -247,8 +236,7 @@ public class Parser {
 		case Tag.ID:
 			match(Tag.ID);
 			break;
-		default:
-			throw error("in expr");
+		default: throw error("in expr");
 		}
 	}
 
@@ -263,8 +251,7 @@ public class Parser {
 			expr();
 			exprlistp();
 			break;
-		default:
-			throw error("in exprlist");
+		default: throw error("in exprlist");
 		}
 	}
 
@@ -278,10 +265,10 @@ public class Parser {
 		case ']':
 		case ')':
 			break;
-		default:
-			throw error("in exprlistp");
+		default: throw error("in exprlistp");
 		}
 	}
+
 	public static void main(String args[]) throws Exception{
 		BufferedReader br = new BufferedReader(new FileReader("_3_2_parser/input.txt"));
 		Parser parser = new Parser(new Lexer(), br);

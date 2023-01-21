@@ -10,9 +10,7 @@ public class Lexer {
 	private void readch(BufferedReader br) {
 		try {
 			peek = (char) br.read();
-		} catch (IOException exc) {
-			peek = EOF;
-		}
+		} catch (IOException exc) { peek = EOF; }
 	}
 
 	private NumberTok toNumberToken(BufferedReader br) {

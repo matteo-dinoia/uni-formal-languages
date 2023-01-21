@@ -30,17 +30,15 @@ public class Parser {
 		else throw error("syntax error");
 	}
 
-	/* VARIABLE */
+	// VARIABLES
 	public void start() {
 		switch (look.tag) {
 			case '(':
 			case Tag.NUM:
-				/*REAL*/
 				expr();
 				match(Tag.EOF);
 				break;
-			default:
-				throw error("wrong caracter: "+look+" in start with guide {(, NUM}");
+			default: throw error("found '"+look+"' in start with guide {(, NUM}");
 		}
 	}
 
@@ -48,12 +46,10 @@ public class Parser {
 		switch (look.tag){
 			case '(':
 			case Tag.NUM:
-				/*REAL*/
 				term();
 				exprp();
 				break;
-			default:
-				throw error("wrong caracter: "+look+" in expr with guide {(, NUM}");
+			default: throw error("found '"+look+"' in expr with guide {(, NUM}");
 		}
 	}
 
@@ -72,8 +68,7 @@ public class Parser {
 			case ')':
 			case Tag.EOF:
 				break;
-			default:
-				throw error("wrong caracter: "+look+" in exprp with guide {+,-,9,EOF}");
+			default: throw error("found '"+look+"' in exprp with guide {+,-,9,EOF}");
 		}
 	}
 
@@ -81,12 +76,10 @@ public class Parser {
 		switch (look.tag) {
 			case '(':
 			case Tag.NUM:
-				/*REAL*/
 				fact();
 				termp();
 				break;
-			default:
-				throw error("wrong caracter: "+look+" in term with guide {(, NUM}");
+			default: throw error("found '"+look+"' in term with guide {(, NUM}");
 		}
 	}
 
@@ -107,8 +100,7 @@ public class Parser {
 			case '+':
 			case '-':
 				break;
-			default:
-				throw error("wrong caracter: "+look+" in termp with guide {*, /, ), EOF}");
+			default: throw error("found '"+look+"' in termp with guide {*, /, ), EOF}");
 		}
 	}
 
@@ -122,8 +114,7 @@ public class Parser {
 			case Tag.NUM:
 				match(Tag.NUM);
 				break;
-			default:
-				throw error("wrong caracter: "+look+" in fact with guide {(, NUM}");
+			default: throw error("found '"+look+"' in fact with guide {(, NUM}");
 		}
 	}
 
@@ -132,7 +123,7 @@ public class Parser {
 		Parser parser = new Parser(new Lexer(), br);
 
 		parser.start();
-		System.out.println("Input OK  (parsed correctly)");
+		System.out.println("Input OK (parsed correctly)");
 
 		if(br!=null) br.close();
 	}
