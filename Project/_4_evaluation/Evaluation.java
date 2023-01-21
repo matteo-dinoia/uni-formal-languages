@@ -145,24 +145,13 @@ public class Evaluation {
 	}
 
 	/* MAIN */
-	public static void main(String args[]){
-		BufferedReader br=null;
-		try {
-			//FILE READING
-			br = new BufferedReader(new FileReader("_4_evaluation/input.txt"));
+	public static void main(String args[]) throws Exception{
+		BufferedReader br = new BufferedReader(new FileReader("_4_evaluation/input.txt"));
+		Evaluation eval = new Evaluation(new Lexer(), br);
 
-			//EXECUTION
-			Evaluation eval = new Evaluation(new Lexer(), br);
-			eval.start();
+		eval.start();
+		System.out.println("Input OK (evaluated correctly)");
 
-			//RECOGNISED
-			System.out.println("Input OK (evaluated correctly)");
-		} catch (Exception e) {e.printStackTrace();
-		}finally{
-			if(br==null) return;
-			try {
-				br.close();
-			} catch (IOException e) {}
-		}
+		if(br!=null) br.close();
 	}
 }

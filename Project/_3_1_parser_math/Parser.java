@@ -8,37 +8,26 @@ public class Parser {
 	private Lexer lex;
 	private BufferedReader pbr;
 	private Token look;
-	public boolean silentParser=false;
 
 	public Parser(Lexer l, BufferedReader br) {
-		this(l, br, false);
-	}
-
-	public Parser(Lexer l, BufferedReader br, boolean silentParser) {
-		this.silentParser=silentParser;
-
 		lex = l;
 		pbr = br;
 		move(); // read first term
-
 	}
 
-	void move() { /* lex a term */
+	private void move() { // lex a term
 		look = lex.lexical_scan(pbr);
-		if(!silentParser)
-			System.out.println("token = " + look);
+		System.out.println("token = " + look);
 	}
 
-	Error error(String s) { /* print error messange */
+	private Error error(String s) { // return new error
 		return new Error("near line " + lex.line + ": " + s);
 	}
 
-	void match(int t) {
-		if (look.tag == t) {
-			if (look.tag != Tag.EOF)
-				move();
-		} else
-			throw error("syntax error");
+	private void match(int t) {
+		if (look.tag == t)
+			if (look.tag != Tag.EOF) move();
+		else throw error("syntax error");
 	}
 
 	/* VARIABLE */
@@ -138,23 +127,13 @@ public class Parser {
 		}
 	}
 
-	public static void main(String args[]){
-		BufferedReader br=null;
-		try {
-			br = new BufferedReader(new FileReader("_3_1_parser_math/input.txt"));
+	public static void main(String args[]) throws Exception{
+		BufferedReader br = new BufferedReader(new FileReader("_3_1_parser_math/input.txt"));
+		Parser parser = new Parser(new Lexer(), br);
 
-			Parser parser = new Parser(new Lexer(), br);
-			parser.start();
+		parser.start();
+		System.out.println("Input OK  (parsed correctly)");
 
-			System.out.println("Input OK  (parsed correctly)");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}finally{
-			if(br==null)
-				return;
-			try {
-				br.close();
-			} catch (IOException e) {e.printStackTrace();}
-		}
+		if(br!=null) br.close();
 	}
 }
