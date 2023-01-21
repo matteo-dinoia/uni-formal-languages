@@ -149,7 +149,7 @@ public class Evaluation {
 		BufferedReader br=null;
 		try {
 			//FILE READING
-			br = new BufferedReader(new FileReader("Project/_4_evaluation/input.txt"));
+			br = new BufferedReader(new FileReader("_4_evaluation/input.txt"));
 
 			//EXECUTION
 			Evaluation eval = new Evaluation(new Lexer(), br);

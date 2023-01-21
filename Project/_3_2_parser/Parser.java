@@ -295,7 +295,7 @@ public class Parser {
 	public static void main(String args[]){
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("Project/_3_2_parser/input.txt"));
+			br = new BufferedReader(new FileReader("_3_2_parser/input.txt"));
 
 			Parser parser = new Parser(new Lexer(), br);
 			parser.prog();

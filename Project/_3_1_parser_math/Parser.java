@@ -141,7 +141,7 @@ public class Parser {
 	public static void main(String args[]){
 		BufferedReader br=null;
 		try {
-			br = new BufferedReader(new FileReader("Project/_3_1_parser_math/input.txt"));
+			br = new BufferedReader(new FileReader("_3_1_parser_math/input.txt"));
 
 			Parser parser = new Parser(new Lexer(), br);
 			parser.start();
