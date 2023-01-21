@@ -1,6 +1,6 @@
 package _1_dfa;
 
-public class _7_ {
+public class _07_ {
 	public static final int POZZO = 13;
 
 	public static boolean scan(String s) {

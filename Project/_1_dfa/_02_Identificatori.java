@@ -1,6 +1,6 @@
 package _1_dfa;
 
-public class _2_Identificatori {
+public class _02_Identificatori {
 	public static boolean scan(String s) {
 		int state = 0;
 		int i = 0;

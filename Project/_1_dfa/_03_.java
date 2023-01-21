@@ -1,6 +1,6 @@
 package _1_dfa;
 
-public class _3_ {
+public class _03_ {
 	public static boolean scan(String s) {
 		int state = 0;
 		int i = 0;
