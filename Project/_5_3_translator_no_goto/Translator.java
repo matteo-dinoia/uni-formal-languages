@@ -14,32 +14,29 @@ public class Translator {
 	CodeGenerator code = new CodeGenerator();
 	int count=0;
 
-	//MAIN METHODS
 	public Translator(Lexer l, BufferedReader br) {
 		lex = l;
 		pbr = br;
 		move();
 	}
 
-	void move() {
+	private void move() {
 		look = lex.lexical_scan(pbr);
 		System.out.println("token = " + look);
 	}
 
-	Error error(String s) {
+	private Error error(String s) {
 		throw new Error("near line " + lex.line + ": " + s);
 	}
 
-	void match(int t) {
+	private void match(int t) {
 		if (look.tag == t) {
 			if (look.tag != Tag.EOF) move();
-		} else
-			throw error("syntax error");
+		} else throw error("syntax error");
 	}
 
-
-	// DA PARSER
-	public void prog(){
+	// VARIABLES
+	public void prog() throws IOException{
 		switch(look.tag){
 		case Tag.ASSIGN:
 		case Tag.PRINT:
@@ -49,15 +46,11 @@ public class Translator {
 		case '{':
 			statlist();
 			match(Tag.EOF);
-			break;
-		default:
-			throw error("in statlist");
-		}
 
-		//PRINT FILES
-		try { code.toJasmin(); }
-		catch(java.io.IOException e) {
-			System.out.println("IO error\n");
+			//PRINT FILES
+			code.toJasmin();
+			break;
+		default: throw error("in statlist");
 		}
 	}
 
@@ -72,8 +65,7 @@ public class Translator {
 			stat();
 			statlistp();
 			break;
-		default:
-			throw error("in statlist");
+		default: throw error("in statlist");
 		}
 	}
 	private void statlistp() {
@@ -86,8 +78,7 @@ public class Translator {
 		case Tag.EOF:
 		case '}':
 			break;
-		default:
-			throw error("in statlistp");
+		default: throw error("in statlistp");
 		}
 	}
 
@@ -142,8 +133,7 @@ public class Translator {
 			statlist();
 			match('}');
 			break;
-		default:
-			throw error("in stat");
+		default: throw error("in stat");
 		}
 	}
 
@@ -155,8 +145,7 @@ public class Translator {
 			break;
 		case Tag.END:
 			break;
-		default:
-			throw error("in conditionalp");
+		default: throw error("in conditionalp");
 		}
 	}
 
@@ -175,8 +164,7 @@ public class Translator {
 			code.emit(OpCode.istore, id_addr);
 			idlistp(opCode, parameter);
 			break;
-		default:
-			throw error("in idlist");
+		default: throw error("in idlist");
 		}
 	}
 	private void idlistp(OpCode opCode, int parameter){
@@ -202,8 +190,7 @@ public class Translator {
 		case Tag.EOF:
 		case ';':
 			break;
-		default:
-			throw error("in idlistp");
+		default: throw error("in idlistp");
 		}
 	}
 
@@ -215,8 +202,7 @@ public class Translator {
 			code.emitLabel(next_optitem);
 			optlistp(lafter_else);
 			break;
-		default:
-			throw error("in optlist");
+		default: throw error("in optlist");
 		}
 	}
 	private void optlistp(int lafter_else){
@@ -229,8 +215,7 @@ public class Translator {
 			break;
 		case ']':
 			break;
-		default:
-			throw error("in optlistp");
+		default: throw error("in optlistp");
 		}
 	}
 
@@ -246,8 +231,7 @@ public class Translator {
 			stat();
 			code.emit(OpCode.GOto, lafter_else);
 			break;
-		default:
-			throw error("in optitem");
+		default: throw error("in optitem");
 		}
 	}
 
@@ -263,8 +247,7 @@ public class Translator {
 			if(!jumpIfTrue) operCode=operCode.getOpposite();
 			code.emit(operCode, ljump);
 			break;
-		default:
-			throw error("in bexpr");
+		default: throw error("in bexpr");
 		}
 	}
 
@@ -303,8 +286,7 @@ public class Translator {
 			match(Tag.ID);
 
 			break;
-		default:
-			throw error("in expr");
+		default: throw error("in expr");
 		}
 	}
 
@@ -321,8 +303,7 @@ public class Translator {
 				code.emit(operationCode, operand);
 			exprlistp(operationCode, operand);
 			break;
-		default:
-			throw error("in exprlist");
+		default: throw error("in exprlist");
 		}
 	}
 	private void exprlistp(OpCode operationCode, int operand){
@@ -336,8 +317,7 @@ public class Translator {
 		case ']':
 		case ')':
 			break;
-		default:
-			throw error("in exprlistp");
+		default: throw error("in exprlistp");
 		}
 	}
 

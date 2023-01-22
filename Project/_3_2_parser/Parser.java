@@ -30,7 +30,7 @@ public class Parser {
 		} else throw error("syntax error");
 	}
 
-	//VARIABLES
+	// VARIABLES
 	public void prog(){
 		switch(look.tag){
 		case Tag.ASSIGN:
@@ -53,7 +53,7 @@ public class Parser {
 		case Tag.READ:
 		case Tag.WHILE:
 		case Tag.COND:
-		case '{':       //ERROR
+		case '{':
 			stat();
 			statlistp();
 			break;
