@@ -341,26 +341,14 @@ public class Translator {
 		}
 	}
 
+	public static void main(String args[]) throws Exception{
+		BufferedReader br = new BufferedReader(new FileReader("_5_3_translator_no_goto/input.lft"));
+		Translator translator = new Translator(new Lexer(), br);
 
-	//TESTING
-	public static void main(String args[]){
-		BufferedReader br=null;
-		try {
-			br = new BufferedReader(new FileReader("_5_3_translator_no_goto/input.lft"));
+		translator.prog();
+		System.out.println("Input OK  (parsed correctly)");
 
-			Translator translator = new Translator(new Lexer(), br);
-			translator.prog();
-
-			System.out.println("Input OK  (parsed correctly)");
-		}catch (IOException e) {
-			e.printStackTrace();
-		}finally{
-			if(br==null)
-				return;
-			try {
-				br.close();
-			} catch (IOException e) {e.printStackTrace();}
-		}
+		if(br!=null)br.close();
 	}
 }
 
