@@ -153,11 +153,7 @@ public class Translator {
 	private void idlist(OpCode opCode, int parameter){
 		switch(look.tag){
 		case Tag.ID:
-			int id_addr = st.lookupAddress(((Word)look).lexeme);
-			if (id_addr==-1) {
-				id_addr = count;
-				st.insert(((Word)look).lexeme,count++);
-			}
+			int id_addr = st.lookupOrNewAddress(((Word)look).lexeme);
 			match(Tag.ID);
 
 			if(opCode!=OpCode.dup || look.tag==',') //if assign and is last element
@@ -172,11 +168,7 @@ public class Translator {
 		switch(look.tag){
 		case ',':
 			match(',');
-			int id_addr = st.lookupAddress(((Word)look).lexeme);
-			if (id_addr==-1) {
-				id_addr = count;
-				st.insert(((Word)look).lexeme,count++);
-			}
+			int id_addr = st.lookupOrNewAddress(((Word)look).lexeme);
 			match(Tag.ID);
 
 			if(opCode!=OpCode.dup || look.tag==',') //if assign and is last element

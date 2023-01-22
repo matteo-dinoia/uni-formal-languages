@@ -1,8 +1,8 @@
-read[a,b,c];
-conditional[
-	option(! == a b ) do print[a]
-]else print [b] end;
-conditional[
-	option (!|| <= b a  <= c a) do print[a]
-	option (!|| <= a b <= c b) do print[b]
-	] else print[c] end
+
+assign 10 to a;
+assign 10 to a,b,c;
+read[a,b];
+while (<> a b)
+	conditional [ option (> a b) do assign - a b to a ]
+	else assign - b a to b end;
+print[a]
