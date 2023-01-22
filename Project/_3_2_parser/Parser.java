@@ -53,7 +53,7 @@ public class Parser {
 		case Tag.READ:
 		case Tag.WHILE:
 		case Tag.COND:
-		case '}':
+		case '{':       //ERROR
 			stat();
 			statlistp();
 			break;

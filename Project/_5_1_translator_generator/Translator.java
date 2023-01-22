@@ -68,7 +68,7 @@ public class Translator {
 		case Tag.READ:
 		case Tag.WHILE:
 		case Tag.COND:
-		case '}':
+		case '{':
 			stat();
 			statlistp();
 			break;
