@@ -27,13 +27,12 @@ public class CodeGenerator {
 
 	public void toJasmin() throws IOException{
 		PrintWriter out = new PrintWriter(new FileWriter("Output.j"));
-		String temp = "";
-		temp = temp + header;
-		while(instructions.size() > 0){
-			Instruction tmp = instructions.remove();
-			temp = temp + tmp.toJasmin();
-		}
+
+		String temp = header;
+		while(instructions.size() > 0)
+			temp = temp + instructions.remove().toJasmin();
 		temp = temp + footer;
+
 		out.println(temp);
 		out.flush();
 		out.close();

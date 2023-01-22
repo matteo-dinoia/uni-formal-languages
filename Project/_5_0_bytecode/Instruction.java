@@ -17,10 +17,6 @@ public class Instruction {
 		String temp="";
 		switch (opCode) {
 			case ldc : temp = "\tldc " + operand + "\n"; break;
-			case invokestatic :
-				if( operand == 1) temp = "\tinvokestatic " + "Output/print(I)V" + "\n";
-				else temp = "\tinvokestatic " + "Output/read()I" + "\n";
-				break;
 			case iadd : temp = "\tiadd " + "\n"; break;
 			case imul : temp = "\timul " + "\n"; break;
 			case idiv : temp = "\tidiv " + "\n"; break;
@@ -39,8 +35,11 @@ public class Instruction {
 			case ifne : temp = "\tifne L" + operand + "\n"; break;
 			case GOto : temp = "\tgoto L" + operand + "\n" ; break;
 			case label : temp = "  L" + operand + ":\n"; break;
-			//mine
-			case dup: temp = "\tdup"+"\n"; break;
+			case dup: temp = "\tdup"+"\n"; break; //mine
+			case invokestatic :
+				if( operand == 1) temp = "\tinvokestatic " + "Output/print(I)V" + "\n";
+				else temp = "\tinvokestatic " + "Output/read()I" + "\n";
+				break;
 		}
 		return temp;
 	}
