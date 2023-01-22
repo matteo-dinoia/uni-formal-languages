@@ -25,9 +25,9 @@ public class Parser {
 	}
 
 	private void match(int t) {
-		if (look.tag == t)
+		if (look.tag == t){
 			if (look.tag != Tag.EOF) move();
-		else throw error("syntax error");
+		} else throw error("syntax error");
 	}
 
 	// VARIABLES
