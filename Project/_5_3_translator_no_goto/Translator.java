@@ -89,18 +89,18 @@ public class Translator {
 			match(Tag.ASSIGN);
 			expr();
 			match(Tag.TO);
-			idlist(OpCode.dup, -1);
+			idlist(OpCode.dup, -1, false);
 			break;
 		case Tag.PRINT:
 			match(Tag.PRINT);
 			match('[');
-			exprlist(OpCode.invokestatic, 1);
+			exprlist(OpCode.invokestatic, 1, true);
 			match(']');
 			break;
 		case Tag.READ:
 			match(Tag.READ);
 			match('[');
-			idlist(OpCode.invokestatic, 0);
+			idlist(OpCode.invokestatic, 0, true);
 			match(']');
 			break;
 		case Tag.WHILE:
@@ -149,31 +149,31 @@ public class Translator {
 		}
 	}
 
-	private void idlist(OpCode opCode, int parameter){
+	private void idlist(OpCode opCode, int parameter, boolean alsoExecuteLastTime){
 		switch(look.tag){
 		case Tag.ID:
 			int id_addr = st.lookupOrNewAddress(((Word)look).lexeme);
 			match(Tag.ID);
 
-			if(opCode!=OpCode.dup || look.tag==',') //if assign and is last element
+			if(alsoExecuteLastTime || look.tag==',') //if not last or execute also in last
 				code.emit(opCode, parameter);
 			code.emit(OpCode.istore, id_addr);
-			idlistp(opCode, parameter);
+			idlistp(opCode, parameter, alsoExecuteLastTime);
 			break;
 		default: throw error("in idlist");
 		}
 	}
-	private void idlistp(OpCode opCode, int parameter){
+	private void idlistp(OpCode opCode, int parameter, boolean alsoExecuteLastTime){
 		switch(look.tag){
 		case ',':
 			match(',');
 			int id_addr = st.lookupOrNewAddress(((Word)look).lexeme);
 			match(Tag.ID);
 
-			if(opCode!=OpCode.dup || look.tag==',') //if assign and is last element
+			if(alsoExecuteLastTime || look.tag==',') //if not last or execute also in last
 				code.emit(opCode, parameter);
 			code.emit(OpCode.istore, id_addr);
-			idlistp(opCode, parameter);
+			idlistp(opCode, parameter, alsoExecuteLastTime);
 			break;
 		case ']':
 		case '}':
@@ -248,13 +248,13 @@ public class Translator {
 		case '+':
 			match('+');
 			match('(');
-			exprlist(OpCode.iadd, -1);
+			exprlist(OpCode.iadd, -1, false);
 			match(')');
 			break;
 		case '*':
 			match('*');
 			match('(');
-			exprlist(OpCode.imul, -1);
+			exprlist(OpCode.imul, -1, false);
 			match(')');
 			break;
 		case '-':
@@ -282,7 +282,7 @@ public class Translator {
 		}
 	}
 
-	private void exprlist(OpCode operationCode, int operand){
+	private void exprlist(OpCode operationCode, int operand, boolean alsoExecuteFirstTime){
 		switch(look.tag){
 		case '+':
 		case '-':
@@ -291,20 +291,20 @@ public class Translator {
 		case Tag.NUM:
 		case Tag.ID:
 			expr();
-			if(operationCode==OpCode.invokestatic) // if is print
+			if(alsoExecuteFirstTime)
 				code.emit(operationCode, operand);
-			exprlistp(operationCode, operand);
+			exprlistp(operationCode, operand, alsoExecuteFirstTime);
 			break;
 		default: throw error("in exprlist");
 		}
 	}
-	private void exprlistp(OpCode operationCode, int operand){
+	private void exprlistp(OpCode operationCode, int operand, boolean alsoExecuteFirstTime){
 		switch(look.tag){
 		case ',':
 			match(',');
 			expr();
 			code.emit(operationCode, operand);
-			exprlistp(operationCode, operand);
+			exprlistp(operationCode, operand, alsoExecuteFirstTime);
 			break;
 		case ']':
 		case ')':
