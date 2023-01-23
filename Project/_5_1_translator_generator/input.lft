@@ -1,3 +1,12 @@
+assign 11 to d;
+assign 10 to a,b,c;
+print[a,b,c,d, +(a,b,c,d), *(a,b,c,d)];
+read[a,b];
+while (<> a b)
+	conditional [ option (> a b) do assign - a b to a ]
+	else assign - b a to b end;
+print[a]
+
 /*assign 1 to a;
 read[a];
 print[a];
@@ -39,17 +48,6 @@ conditional[
 print[a, b, c];
 print[+(a,b,c)]
 */
-
-
-assign 10 to a;
-assign 10 to a,b,c;
-read[a,b];
-read[c];
-while (<> a b)
-	conditional [ option (> a b) do assign - a b to a ]
-	else assign - b a to b end;
-print[a]
-
 
 /*
 print[1,+(2,3,4)];

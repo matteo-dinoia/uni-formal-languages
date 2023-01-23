@@ -1,8 +1,42 @@
 
-assign 10 to a;
+assign 11 to d;
 assign 10 to a,b,c;
+print[a,b,c,d, +(a,b,c,d), *(a,b,c,d)];
 read[a,b];
 while (<> a b)
 	conditional [ option (> a b) do assign - a b to a ]
 	else assign - b a to b end;
 print[a]
+
+
+
+/*
+// reorder in descending order
+read[a, b, c];
+conditional[
+	option (<= a c) do{
+		assign a to tmp;
+		assign c to a;
+		assign tmp to c
+	}
+]else print[11111] end;
+
+conditional[
+	option (<= b c) do{
+		assign c to tmp;
+		assign b to c;
+		assign tmp to b
+	}
+]else print[22222] end;
+
+conditional[
+	option (<= a b) do{
+		assign a to tmp;
+		assign b to a;
+		assign tmp to b
+	}
+]else print[33333] end;
+
+print[0, 0, a, b, c];
+print[0, 0, +(a,b,c)]
+*/

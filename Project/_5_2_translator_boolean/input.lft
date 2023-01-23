@@ -1,5 +1,15 @@
-read[a,b,c];
+/*read[a,b,c];
 conditional[
 	option (&& <= b a  <= c a) do print[a]
 	option (&& <= a b <= c b) do print[b]
 	] else print[c] end
+
+*/
+assign 11 to d;
+assign 10 to a,b,c;
+print[a,b,c,d, +(a,b,c,d), *(a,b,c,d)];
+read[a,b];
+while (<> a b)
+	conditional [ option (> a b) do assign - a b to a ]
+	else assign - b a to b end;
+print[a]
